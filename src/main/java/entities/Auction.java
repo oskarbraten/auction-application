@@ -31,7 +31,6 @@ public class Auction {
 	@ManyToOne
 	private Product product;
 	
-	
 	@OneToMany(mappedBy = "auction")
 	private List<Bid> bids;
 	
@@ -52,7 +51,6 @@ public class Auction {
 		this.startingPrice = startingPrice;
 		this.buyoutPrice = buyoutPrice;
 		this.length = length;
-		
 		this.bids = new ArrayList<>();
 	}
 
@@ -62,7 +60,6 @@ public class Auction {
 		this.buyoutPrice = buyoutPrice;
 		this.startTime = startTime;
 		this.length = length;
-		
 		this.bids = new ArrayList<>();
 	}
 
@@ -104,6 +101,7 @@ public class Auction {
 	public void setProduct(Product product) {
 		this.product = product;
 	}
+
 	@XmlTransient
 	public List<Bid> getBids() {
 		return bids;
@@ -112,6 +110,7 @@ public class Auction {
 	public void setBids(List<Bid> bids) {
 		this.bids = bids;
 	}
+
 	@XmlTransient
 	public Feedback getFeedback() {
 		return feedback;
@@ -151,6 +150,5 @@ public class Auction {
 
 	public void setLength(Long length) {
 		this.length = length;
-	};
-	
+	}
 }

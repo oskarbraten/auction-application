@@ -38,8 +38,6 @@ public class Feedback {
 		this.sellerRating = sellerRating;
 		this.productRating = productRating;
 	}
-	
-	
 
 	/** Data services */
 	public Integer getId() {
@@ -91,5 +89,4 @@ public class Feedback {
 	public void setProductRating(Integer productRating) {
 		this.productRating = productRating;
 	}
-
 }

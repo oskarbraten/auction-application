@@ -19,9 +19,8 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	private String email;
-	private String name;
-	private String phone;
+	@OneToOne
+	private Address address;
 
 	@OneToMany(mappedBy = "user")
 	private List<Product> products;
@@ -29,20 +28,23 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Bid> bids;
 
+	private String email;
+	private String name;
+	private String phone;
+
 	/** Constructors */
 	public User() {}
 
-	public User(String email, String name, String phone) {
+	public User(String email, String name, String phone, Address address) {
 		this.email = email;
 		this.name = name;
 		this.phone = phone;
+		this.address = address;
 		
 		this.products = new ArrayList<Product>();
 		this.bids = new ArrayList<Bid>();
 	}
-	
-	
-	
+
 	/** Data services */
 	public Integer getId() {
 		return id;
@@ -77,6 +79,11 @@ public class User {
 	}
 
 	@XmlTransient
+	public Address getAddress() {return address;}
+
+	public void setAddress(Address address) {this.address = address;}
+
+	@XmlTransient
 	public List<Product> getProducts() {
 		return products;
 	}
@@ -93,6 +100,5 @@ public class User {
 	public void setBids(List<Bid> bids) {
 		this.bids = bids;
 	}
-
 }
 

@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 public class Bid {
 
+	/** Variables */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
@@ -29,10 +30,10 @@ public class Bid {
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	private User user;
-	
-	
+
 	private Double amount;
 
+	/** Constructor */
 	public Bid() {
 	}
 
@@ -43,11 +44,10 @@ public class Bid {
 		this.amount = amount;
 	}
 
+	/** Data services */
 	public Integer getId() {
 		return id;
 	}
-	
-	
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -78,5 +78,4 @@ public class Bid {
 	public void setAuction(Auction auction) {
 		this.auction = auction;
 	}
-
 }

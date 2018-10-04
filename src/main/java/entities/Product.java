@@ -20,17 +20,17 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	private String name;
-	private String description;
-	private String features;
-	private String picture;
-
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
 	@OneToMany(mappedBy = "product")
 	private ArrayList<Auction> auctions;
+
+	private String name;
+	private String description;
+	private String features;
+	private String picture;
 
 	/** Constructors */
 	public Product() {
@@ -45,8 +45,6 @@ public class Product {
 
 		this.auctions = new ArrayList<Auction>();
 	}
-	
-	
 	
 	/** Data services */
 	public Integer getId() {
@@ -106,5 +104,4 @@ public class Product {
 	public void setAuctions(ArrayList<Auction> auctions) {
 		this.auctions = auctions;
 	}
-
 }
