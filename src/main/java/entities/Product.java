@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -24,8 +25,8 @@ public class Product {
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	@OneToMany(mappedBy = "product")
-	private ArrayList<Auction> auctions;
+	@OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
+	private List<Auction> auctions;
 
 	private String name;
 	private String description;
@@ -97,7 +98,7 @@ public class Product {
 	}
 
 	@XmlTransient
-	public ArrayList<Auction> getAuctions() {
+	public List<Auction> getAuctions() {
 		return auctions;
 	}
 

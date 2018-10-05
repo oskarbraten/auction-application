@@ -19,9 +19,6 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    // @OneToOne(mappedBy = "address")
-    // private User user;
-
     private String street;
     private String city;
     private String county;
@@ -32,8 +29,7 @@ public class Address {
     public Address(){
 
     }
-    public Address(/*User user,*/ String street, String city, String county, String postalCode, String country){
-        //this.user = user;
+    public Address(String street, String city, String county, String postalCode, String country){
         this.street = street;
         this.city = city;
         this.county = county;
@@ -45,11 +41,6 @@ public class Address {
     public Integer getId() {return id;}
 
     public void setId(Integer id) {this.id = id;}
-
-    //@XmlTransient
-    //public User getUser() {return user; }
-
-    //public void setUser(User user) { this.user = user;}
 
     public String getStreet() {return street;}
 

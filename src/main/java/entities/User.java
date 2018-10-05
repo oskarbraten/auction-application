@@ -19,13 +19,13 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.PERSIST)
 	private Address address;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
 	private List<Product> products;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
 	private List<Bid> bids;
 
 	private String email;
@@ -78,7 +78,6 @@ public class User {
 		this.phone = phone;
 	}
 
-	//@XmlTransient
 	public Address getAddress() {return address;}
 
 	public void setAddress(Address address) {this.address = address;}
