@@ -20,7 +20,7 @@ public class Feedback {
 	private Auction auction;
 	
 	@OneToOne
-	@JoinColumn(name = "USER_ID")
+	@JoinColumn(name = "user_id")
 	private User user;
 	
 	private String text;

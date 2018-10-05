@@ -24,11 +24,11 @@ public class Bid {
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name = "AUCTION_ID")
+	@JoinColumn(name = "auction_id")
 	private Auction auction;
 	
 	@ManyToOne
-	@JoinColumn(name = "USER_ID")
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	private Double amount;

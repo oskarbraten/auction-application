@@ -21,7 +21,7 @@ public class Product {
 	private Integer id;
 
 	@ManyToOne
-	@JoinColumn(name = "USER_ID")
+	@JoinColumn(name = "user_id")
 	private User user;
 
 	@OneToMany(mappedBy = "product")

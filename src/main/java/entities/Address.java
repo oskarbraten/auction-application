@@ -19,21 +19,21 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @OneToOne(mappedBy = "address")
-    private User user;
+    // @OneToOne(mappedBy = "address")
+    // private User user;
 
     private String street;
     private String city;
     private String county;
-    private Integer postalCode; // Maybe change to String?
+    private String postalCode; // Maybe change to String?
     private String country; // Using ISO3166-1 letter codes to make it a locale enum type
 
     /** Constructor */
     public Address(){
 
     }
-    public Address(User user, String street, String city, String county, int postalCode, String country){
-        this.user = user;
+    public Address(/*User user,*/ String street, String city, String county, String postalCode, String country){
+        //this.user = user;
         this.street = street;
         this.city = city;
         this.county = county;
@@ -46,10 +46,10 @@ public class Address {
 
     public void setId(Integer id) {this.id = id;}
 
-    @XmlTransient
-    public User getUser() {return user; }
+    //@XmlTransient
+    //public User getUser() {return user; }
 
-    public void setUser(User user) { this.user = user;}
+    //public void setUser(User user) { this.user = user;}
 
     public String getStreet() {return street;}
 
@@ -63,9 +63,9 @@ public class Address {
 
     public void setCounty(String county) {this.county = county;}
 
-    public int getPostalCode() {return postalCode;}
+    public String getPostalCode() {return postalCode;}
 
-    public void setPostalCode(int postalCode) {this.postalCode = postalCode;}
+    public void setPostalCode(String postalCode) {this.postalCode = postalCode;}
 
     public String getCountry() {return country;}
 
