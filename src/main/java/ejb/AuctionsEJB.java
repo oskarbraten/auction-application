@@ -34,8 +34,9 @@ public class AuctionsEJB {
     }
 
     //Get a specific users auctions
-    public auctions(User user){
-
+    public Auction auctions(User user){
+        //TODO Implement method boddy
+        return null;
     }
 
     public List<Bid> auctionBids(String id) {
