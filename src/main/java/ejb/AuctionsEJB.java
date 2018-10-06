@@ -3,6 +3,7 @@ package ejb;
 import entities.Auction;
 import entities.Bid;
 import entities.User;
+import entities.Product;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -33,12 +34,34 @@ public class AuctionsEJB {
         return em.find(Auction.class, idInt);
     }
 
-    //Get a specific users auctions
-    public Auction auctions(User user){
-        //TODO Implement method boddy
-        return null;
+    // Create a new auction
+    public boolean newAuction(Product product, double startingPrice, double buyoutPrice, long startTime, long length) {
+        //TODO implement method body
+        return false;
     }
 
+    //Publish an auction
+    public boolean publishAuction(){
+        //TODO implement method body
+        return false;
+    }
+
+    //Get a specific users auctions
+    public List<Auction> auctions(String usersId){
+        int userId = Integer.parseInt(usersId);
+
+        // Sellect all actions from all products from user
+        Query query = em.createQuery("SELECT a from auction a WHERE a.product.user.id = ?1", Auction.class)
+                .setParameter(1, userId);
+        try {
+            return query.getResultList();
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    //TODO move this to?
+    //Get all bids from an auction
     public List<Bid> auctionBids(String id) {
         int idInt = Integer.parseInt(id);
         Auction auction = em.find(Auction.class, idInt);
@@ -51,8 +74,9 @@ public class AuctionsEJB {
 
     }
 
+    //TODO move this to?
+    //get a specific known bid from an auction
     public Bid auctionBid(String aid, String bid) {
-
         int auctionId = Integer.parseInt(aid);
         int bidId = Integer.parseInt(bid);
 
@@ -68,6 +92,8 @@ public class AuctionsEJB {
         }
     }
 
+    //TODO move to participateEJB
+    //Place a bid
     public Bid placeBid(String id, String userIdString, String amountString) {
         int auctionId = Integer.parseInt(id);
         Auction auction = em.find(Auction.class, auctionId);
@@ -75,8 +101,9 @@ public class AuctionsEJB {
         User user = em.find(User.class, userId);
         double amount = Double.parseDouble(amountString);
 
-        if (auction == null || user == null) {
-            return null;
+        // If: no aution or no user or the bid is a negative amount
+        if (auction == null || user == null || amount <= 0 ) {
+            return null; //Illegal action
         }
 
         Bid bid = new Bid(auction, user, amount);
