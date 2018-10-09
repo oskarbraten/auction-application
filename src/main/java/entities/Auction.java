@@ -85,6 +85,11 @@ public class Auction {
 			return true;
 		}
 	}
+
+	public Bid highestBid(){
+	    //TODO implement method boddy
+	    return null;
+    }
 	
 	public void setId(Integer id) {
 		this.id = id;

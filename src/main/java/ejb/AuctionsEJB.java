@@ -4,11 +4,14 @@ import entities.Auction;
 import entities.Bid;
 import entities.User;
 import entities.Product;
+//import soap.AuctionServer;
 
 import javax.ejb.Stateless;
+//import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,15 +19,22 @@ import java.util.List;
  */
 
 @Stateless //Bean does not need to be connected to a user, I think
-public class AuctionsEJB {
+//@WebService(endpointInterface = "soap.AuctionServer")
+public class AuctionsEJB /*implements AuctionServer*/ {
 
     /* Entity Manager*/
     @PersistenceContext(unitName = "AuctionApplicationPU")
     private EntityManager em;
 
-    //Get All Auctions
+
+    //Get All unfinished Auctions
     public List<Auction> getAuctions() { // No security
-        Query query = em.createQuery("SELECT a from auction a");
+        Date date = new Date(); // Thread safety problem
+        long now = date.getTime();
+
+        Query query = em.createQuery("SELECT a from auction a WHERE " +
+                "a.startTime != null AND a.startTime < ?1 AND (a.startTime + a.length) > ?1 ", Auction.class)
+                .setParameter(1, now);
         return query.getResultList();
     }
 
@@ -36,21 +46,43 @@ public class AuctionsEJB {
 
     // Create a new auction
     public boolean newAuction(Product product, double startingPrice, double buyoutPrice, long startTime, long length) {
-        //TODO implement method body
-        return false;
+        Auction a = new Auction();
+        a.setProduct(product);
+        a.setStartingPrice(startingPrice);
+        a.setBuyoutPrice(buyoutPrice);
+        a.setStartTime(startTime); // should work if null
+        a.setLength(length);
+
+        try{
+            em.persist(a);
+            return true;
+        }catch (Exception e) {
+            return false;
+        }
     }
 
     //Publish an auction
-    public boolean publishAuction(){
-        //TODO implement method body
-        return false;
+    public boolean publishAuction(String id){
+        int idInt = Integer.parseInt(id);
+        Auction a = em.find(Auction.class, idInt);
+        Date date = new Date(); // Thread safety problem
+        long now = date.getTime();
+        a.setStartTime(now);
+       try {
+           em.getTransaction().begin();
+           em.merge(a);
+           em.getTransaction().commit();
+           return true;
+       } catch (Exception e) {
+           return false;
+       }
     }
 
     //Get a specific users auctions
     public List<Auction> auctions(String usersId){
         int userId = Integer.parseInt(usersId);
 
-        // Sellect all actions from all products from user
+        // Select all actions from all products from user
         Query query = em.createQuery("SELECT a from auction a WHERE a.product.user.id = ?1", Auction.class)
                 .setParameter(1, userId);
         try {
@@ -101,7 +133,7 @@ public class AuctionsEJB {
         User user = em.find(User.class, userId);
         double amount = Double.parseDouble(amountString);
 
-        // If: no aution or no user or the bid is a negative amount
+        // If: no auction or no user or the bid is a negative amount
         if (auction == null || user == null || amount <= 0 ) {
             return null; //Illegal action
         }
