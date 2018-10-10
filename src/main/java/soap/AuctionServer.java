@@ -1,4 +1,4 @@
-/**package soap;
+package soap;
 
 import entities.Auction;
 import entities.Bid;
@@ -8,37 +8,41 @@ import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.jws.soap.SOAPBinding.Style;
-import java.util.List;
+import java.util.ArrayList;
 
 @WebService
 @SOAPBinding(style = Style.RPC)
 public interface AuctionServer {
-    //Get All Auctions
+
     @WebMethod
-    List<Auction> getAuctions();
+    //Get All unfinished Auctions
+    ArrayList<Auction> getAuctions();
 
+    @WebMethod
     //Get a specific auction
-    @WebMethod Auction auction(String id);
+    Auction auction(String id);
+
+    @WebMethod
     // Create a new auction
+    boolean newAuction(Product product, double startingPrice, double buyoutPrice, long startTime, long length);
 
-    @WebMethod boolean newAuction(Product product, double startingPrice, double buyoutPrice, long startTime, long length);
-
+    @WebMethod
     //Publish an auction
-    @WebMethod boolean publishAuction();
+    boolean publishAuction(String id);
 
+    @WebMethod
     //Get a specific users auctions
-    @WebMethod List<Auction> auctions(String usersId);
+    ArrayList<Auction> auctions(String usersId);
 
-    //TODO move this to?
+    @WebMethod
     //Get all bids from an auction
-    @WebMethod List<Bid> auctionBids(String id);
+    ArrayList<Bid> auctionBids(String id);
 
-    //TODO move this to?
+    @WebMethod
     //get a specific known bid from an auction
-    @WebMethod Bid auctionBid(String aid, String bid);
+    Bid auctionBid(String aid, String bid);
 
-    //TODO move to participateEJB
+    @WebMethod
     //Place a bid
-    @WebMethod Bid placeBid(String id, String userIdString, String amountString);
+    Bid placeBid(String id, String userIdString, String amountString);
 }
-*/

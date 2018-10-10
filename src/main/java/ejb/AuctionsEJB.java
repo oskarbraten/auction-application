@@ -4,13 +4,13 @@ import entities.Auction;
 import entities.Bid;
 import entities.User;
 import entities.Product;
-//import soap.AuctionServer;
+import soap.AuctionServer;
 
-import javax.ejb.Stateless;
-//import javax.jws.WebService;
+import javax.ejb.EJB;
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,30 +18,32 @@ import java.util.List;
  * Class implementing the Browse Auction Use Case
  */
 
-@Stateless //Bean does not need to be connected to a user, I think
-//@WebService(endpointInterface = "soap.AuctionServer")
-public class AuctionsEJB /*implements AuctionServer*/ {
+@WebService(endpointInterface = "soap.AuctionServer")
+public class AuctionsEJB implements AuctionServer {
 
     /* Entity Manager*/
     @PersistenceContext(unitName = "AuctionApplicationPU")
     private EntityManager em;
 
+    @EJB
+    AuctionDAO auctionDao;
 
     //Get All unfinished Auctions
-    public List<Auction> getAuctions() { // No security
-        Date date = new Date(); // Thread safety problem
-        long now = date.getTime();
+    public ArrayList<Auction> getAuctions() { // No security implemented, should be implemented here
+        ArrayList<Auction> auctionList = new ArrayList<>();
+        List<Auction> temp = auctionDao.runningAuctions();
+        int size = temp.size();
 
-        Query query = em.createQuery("SELECT a from auction a WHERE " +
-                "a.startTime != null AND a.startTime < ?1 AND (a.startTime + a.length) > ?1 ", Auction.class)
-                .setParameter(1, now);
-        return query.getResultList();
+        for (int i = 0; i <size; i++){ //Try catch block or move to separate helper class?
+            auctionList.add(temp.get(i));
+        }
+        return auctionList;
     }
 
     //Get a specific auction
     public Auction auction(String id) {
         int idInt = Integer.parseInt(id);
-        return em.find(Auction.class, idInt);
+        return auctionDao.auction(idInt);
     }
 
     // Create a new auction
@@ -53,12 +55,7 @@ public class AuctionsEJB /*implements AuctionServer*/ {
         a.setStartTime(startTime); // should work if null
         a.setLength(length);
 
-        try{
-            em.persist(a);
-            return true;
-        }catch (Exception e) {
-            return false;
-        }
+       return auctionDao.persistAuction(a); // cascade return
     }
 
     //Publish an auction
@@ -68,60 +65,42 @@ public class AuctionsEJB /*implements AuctionServer*/ {
         Date date = new Date(); // Thread safety problem
         long now = date.getTime();
         a.setStartTime(now);
-       try {
-           em.getTransaction().begin();
-           em.merge(a);
-           em.getTransaction().commit();
-           return true;
-       } catch (Exception e) {
-           return false;
-       }
+
+        return auctionDao.updateAuction(a); // cascade return
     }
 
     //Get a specific users auctions
-    public List<Auction> auctions(String usersId){
+    public ArrayList<Auction> auctions(String usersId){
         int userId = Integer.parseInt(usersId);
 
-        // Select all actions from all products from user
-        Query query = em.createQuery("SELECT a from auction a WHERE a.product.user.id = ?1", Auction.class)
-                .setParameter(1, userId);
-        try {
-            return query.getResultList();
-        }catch (Exception e){
-            return null;
+        ArrayList<Auction> auctionsList = new ArrayList<>();
+        List<Auction> temp = auctionDao.usersAuctions(userId);
+        int size = temp.size();
+        for (int i = 0; i <size; i++){ //Try catch block or move to separate helper class?
+            auctionsList.add(temp.get(i));
         }
+        return auctionsList;
     }
 
-    //TODO move this to?
     //Get all bids from an auction
-    public List<Bid> auctionBids(String id) {
+    public ArrayList<Bid> auctionBids(String id) {
         int idInt = Integer.parseInt(id);
-        Auction auction = em.find(Auction.class, idInt);
 
-        if (auction != null) {
-            return auction.getBids();
-        } else {
-            return null;
+        ArrayList<Bid> bidList = new ArrayList<>();
+        List<Bid> temp = auctionDao.allBidsFromAuction(idInt);
+        int size = temp.size();
+        for (int i = 0; i <size; i++){ //Try catch block or move to separate helper class?
+            bidList.add(temp.get(i));
         }
-
+        return bidList;
     }
 
-    //TODO move this to?
     //get a specific known bid from an auction
     public Bid auctionBid(String aid, String bid) {
         int auctionId = Integer.parseInt(aid);
         int bidId = Integer.parseInt(bid);
 
-        // when creating the query, treat the objects as java objects (i.e. bid.auction.id)
-        Query query = em.createQuery("SELECT b FROM bid b WHERE b.id = ?1 AND b.auction.id = ?2", Bid.class)
-                .setParameter(1, bidId)
-                .setParameter(2, auctionId);
-
-        try {
-            return (Bid) query.getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
+        return auctionDao.bidFromAuction(auctionId, bidId);
     }
 
     //TODO move to participateEJB
