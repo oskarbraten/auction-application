@@ -14,35 +14,27 @@ import java.util.ArrayList;
 @SOAPBinding(style = Style.RPC)
 public interface AuctionServer {
 
-    @WebMethod
     //Get All unfinished Auctions
-    ArrayList<Auction> getAuctions();
+    @WebMethod ArrayList<Auction> getAuctions();
 
-    @WebMethod
     //Get a specific auction
-    Auction auction(String id);
+    @WebMethod Auction auction(String id);
 
-    @WebMethod
     // Create a new auction
-    boolean newAuction(Product product, double startingPrice, double buyoutPrice, long startTime, long length);
+    @WebMethod boolean newAuction(Product product, double startingPrice, double buyoutPrice, long startTime, long length);
 
-    @WebMethod
     //Publish an auction
-    boolean publishAuction(String id);
+    @WebMethod boolean publishAuction(String id);
 
-    @WebMethod
     //Get a specific users auctions
-    ArrayList<Auction> auctions(String usersId);
+    @WebMethod ArrayList<Auction> auctions(String usersId);
 
-    @WebMethod
     //Get all bids from an auction
-    ArrayList<Bid> auctionBids(String id);
+    @WebMethod ArrayList<Bid> auctionBids(String id);
 
-    @WebMethod
     //get a specific known bid from an auction
-    Bid auctionBid(String aid, String bid);
+    @WebMethod Bid auctionBid(String aid, String bid);
 
-    @WebMethod
     //Place a bid
-    Bid placeBid(String id, String userIdString, String amountString);
+    @WebMethod Bid placeBid(String id, String userIdString, String amountString);
 }
