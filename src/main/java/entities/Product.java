@@ -1,6 +1,7 @@
 package entities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.*;
@@ -49,9 +50,24 @@ public class Product {
 	
 	/** Data services */
 	public double getRating(){
-		//TODO implement method body
-		return 0;
+		double rating = 0;
+		int numbOfRatings = 0;
+
+		Iterator aIt = auctions.iterator();
+
+		while(aIt.hasNext()){
+			Auction a = (Auction) aIt.next();
+			Feedback f = a.getFeedback();
+			if(f != null || f.getProductRating() != null){ //Feedback exists and a rating exists
+				rating += f.getProductRating();
+				numbOfRatings ++;
+			}
+		}
+
+		return (rating/numbOfRatings);
 	}
+
+
 
 	public Integer getId() {
 		return id;
