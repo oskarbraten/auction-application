@@ -48,6 +48,11 @@ public class Product {
 	}
 	
 	/** Data services */
+	public double getRating(){
+		//TODO implement method body
+		return 0;
+	}
+
 	public Integer getId() {
 		return id;
 	}
