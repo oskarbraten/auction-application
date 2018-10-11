@@ -28,15 +28,8 @@ public class AuctionsSOAP {
 
     //Get All unfinished Auctions
     @WebMethod
-    public ArrayList<Auction> getAuctions() { // No security implemented, should be implemented here
-        ArrayList<Auction> auctionList = new ArrayList<>();
-        List<Auction> temp = auctionDao.runningAuctions();
-        int size = temp.size();
-
-        for (int i = 0; i <size; i++){ //Try catch block or move to separate helper class?
-            auctionList.add(temp.get(i));
-        }
-        return auctionList;
+    public List<Auction> getAuctions() { // No security implemented, should be implemented here
+        return auctionDao.runningAuctions();
     }
 
     //Get a specific auction
@@ -74,29 +67,17 @@ public class AuctionsSOAP {
     }
 
     //Get a specific users auctions
-    public ArrayList<Auction> auctions(String usersId){
+    public List<Auction> auctions(String usersId){
         int userId = Integer.parseInt(usersId);
 
-        ArrayList<Auction> auctionsList = new ArrayList<>();
-        List<Auction> temp = auctionDao.usersAuctions(userId);
-        int size = temp.size();
-        for (int i = 0; i <size; i++){ //Try catch block or move to separate helper class?
-            auctionsList.add(temp.get(i));
-        }
-        return auctionsList;
+        return auctionDao.usersAuctions(userId);
     }
 
     //Get all bids from an auction
-    public ArrayList<Bid> auctionBids(String id) {
+    public List<Bid> auctionBids(String id) {
         int idInt = Integer.parseInt(id);
 
-        ArrayList<Bid> bidList = new ArrayList<>();
-        List<Bid> temp = auctionDao.allBidsFromAuction(idInt);
-        int size = temp.size();
-        for (int i = 0; i <size; i++){ //Try catch block or move to separate helper class?
-            bidList.add(temp.get(i));
-        }
-        return bidList;
+        return auctionDao.allBidsFromAuction(idInt);
     }
 
     //get a specific known bid from an auction
