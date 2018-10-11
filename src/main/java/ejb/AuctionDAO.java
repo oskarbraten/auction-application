@@ -47,8 +47,12 @@ public class AuctionDAO {
         }
     }
 
-    /** Returns a specific auction */
-    public Auction thisAuction(int id) {
+    /**
+     * Returns a specific Auction, or null if it was not found.
+     * @param id
+     * @return
+     */
+    public Auction findAuction(int id) {
         return em.find(Auction.class, id);
     }
 

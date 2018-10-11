@@ -40,7 +40,7 @@ public class AuctionsSOAP {
             System.out.println("Null value string");
         }
         int idInt = Integer.parseInt(id);
-        return auctionDao.thisAuction(idInt);
+        return auctionDao.findAuction(idInt);
     }
 
     // Create a new auction
@@ -58,7 +58,7 @@ public class AuctionsSOAP {
     //Publish an auction
     public boolean publishAuction(String id){
         int idInt = Integer.parseInt(id);
-        Auction a = auctionDao.thisAuction(idInt);
+        Auction a = auctionDao.findAuction(idInt);
         Date date = new Date(); // Thread safety problem
         long now = date.getTime();
         a.setStartTime(now);
