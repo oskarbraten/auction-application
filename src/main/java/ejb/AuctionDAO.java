@@ -2,7 +2,6 @@ package ejb;
 
 import entities.Auction;
 import entities.Bid;
-import entities.Product;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -23,6 +22,17 @@ public class AuctionDAO {
     @PersistenceContext(unitName = "AuctionApplicationPU")
     private EntityManager em;
 
+    /** TEST METHOD returns all auctions */
+    public List<Auction> allAuctions() {
+       /* Query query = em.createQuery("SELECT a from auction a");
+        try {
+            return query.getResultList();
+        } catch (Exception e){
+            return null;
+        }*/
+       return null;
+    }
+
     /** Returns All unfinished Auctions */
     public List<Auction> runningAuctions() {
         Date date = new Date(); // Thread safety problem
@@ -38,7 +48,7 @@ public class AuctionDAO {
     }
 
     /** Returns a specific auction */
-    public Auction auction(int id) {
+    public Auction thisAuction(int id) {
         return em.find(Auction.class, id);
     }
 

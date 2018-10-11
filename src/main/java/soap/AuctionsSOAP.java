@@ -1,15 +1,13 @@
-package ejb;
+package soap;
 
+import ejb.AuctionDAO;
 import entities.Auction;
 import entities.Bid;
-import entities.User;
 import entities.Product;
-import soap.AuctionServer;
 
 import javax.ejb.EJB;
+import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,17 +16,18 @@ import java.util.List;
  * Class implementing the Browse Auction Use Case
  */
 
-@WebService(endpointInterface = "soap.AuctionServer")
-public class AuctionsEJB implements AuctionServer {
+@WebService(serviceName = "AuctionsSOAP")
+public class AuctionsSOAP {
 
     /* Entity Manager*/
-    @PersistenceContext(unitName = "AuctionApplicationPU")
-    private EntityManager em;
+    //@PersistenceContext(unitName = "AuctionApplicationPU")
+    //private EntityManager em;
 
     @EJB
     AuctionDAO auctionDao;
 
     //Get All unfinished Auctions
+    @WebMethod
     public ArrayList<Auction> getAuctions() { // No security implemented, should be implemented here
         ArrayList<Auction> auctionList = new ArrayList<>();
         List<Auction> temp = auctionDao.runningAuctions();
@@ -41,9 +40,14 @@ public class AuctionsEJB implements AuctionServer {
     }
 
     //Get a specific auction
-    public Auction auction(String id) {
+    @WebMethod
+    public Auction findAuction(String id) {
+        if (id == null){
+            //hrow new Exception("ID not found");
+            System.out.println("Null value string");
+        }
         int idInt = Integer.parseInt(id);
-        return auctionDao.auction(idInt);
+        return auctionDao.thisAuction(idInt);
     }
 
     // Create a new auction
@@ -61,7 +65,7 @@ public class AuctionsEJB implements AuctionServer {
     //Publish an auction
     public boolean publishAuction(String id){
         int idInt = Integer.parseInt(id);
-        Auction a = em.find(Auction.class, idInt);
+        Auction a = auctionDao.thisAuction(idInt);
         Date date = new Date(); // Thread safety problem
         long now = date.getTime();
         a.setStartTime(now);
@@ -105,7 +109,7 @@ public class AuctionsEJB implements AuctionServer {
 
     //TODO move to participateEJB
     //Place a bid
-    public Bid placeBid(String id, String userIdString, String amountString) {
+  /*  public Bid placeBid(String id, String userIdString, String amountString) {
         int auctionId = Integer.parseInt(id);
         Auction auction = em.find(Auction.class, auctionId);
         int userId = Integer.parseInt(userIdString);
@@ -126,5 +130,5 @@ public class AuctionsEJB implements AuctionServer {
         em.persist(bid);
 
         return bid;
-    }
+    }*/
 }
