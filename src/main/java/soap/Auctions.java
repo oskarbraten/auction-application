@@ -16,8 +16,8 @@ import java.util.List;
  * Class implementing the Browse Auction Use Case
  */
 
-@WebService(serviceName = "AuctionsSOAP")
-public class AuctionsSOAP {
+@WebService(serviceName = "Auctions")
+public class Auctions {
 
     @EJB
     AuctionDAO auctionDao;
