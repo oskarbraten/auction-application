@@ -54,19 +54,43 @@ public class Product {
 		int numbOfRatings = 0;
 
 		Iterator aIt = auctions.iterator();
-
-		while(aIt.hasNext()){
-			Auction a = (Auction) aIt.next();
-			Feedback f = a.getFeedback();
-			if(f != null || f.getProductRating() != null){ //Feedback exists and a rating exists
-				rating += f.getProductRating();
-				numbOfRatings ++;
+		if(aIt.hasNext()) {
+			while (aIt.hasNext()) {
+				Auction a = (Auction) aIt.next();
+				Feedback f = a.getFeedback();
+				if (f != null || f.getProductRating() != null) { //Feedback exists and a rating exists
+					rating += f.getProductRating();
+					numbOfRatings++;
+				}
 			}
+		}else {
+			return -1; //No rating exist
 		}
 
 		return (rating/numbOfRatings);
 	}
 
+	public double getSellersProductRating(){
+		double rating = 0;
+		int numbOfRatings = 0;
+
+		Iterator aIt = auctions.iterator();
+
+		if(aIt.hasNext()) {
+			while (aIt.hasNext()) {
+				Auction a = (Auction) aIt.next();
+				Feedback f = a.getFeedback();
+				if (f != null || f.getSellerRating() != null) { //Feedback exists and a rating exists
+					rating += f.getSellerRating();
+					numbOfRatings++;
+				}
+			}
+		} else {
+			return -1; //No rating exist
+		}
+
+		return (rating/numbOfRatings);
+	}
 
 
 	public Integer getId() {
