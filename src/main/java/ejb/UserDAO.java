@@ -37,4 +37,25 @@ public class UserDAO {
     public User findUser(int id){
         return em.find(User.class, id);
     }
+
+    public boolean uppdateUser(User u){
+        try {
+            em.getTransaction().begin();
+            em.merge(u);
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /** Persists a user */
+    public boolean persistUser(User u){
+        try {
+            em.persist(u);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
