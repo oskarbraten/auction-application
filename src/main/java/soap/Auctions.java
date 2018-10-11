@@ -1,9 +1,11 @@
 package soap;
 
 import ejb.AuctionDAO;
+import ejb.ProductDAO;
 import entities.Auction;
 import entities.Bid;
 import entities.Product;
+import entities.User;
 
 import javax.ejb.EJB;
 import javax.jws.WebMethod;
@@ -12,9 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Class implementing the Browse Auction Use Case
- */
 
 @WebService(serviceName = "Auctions")
 public class Auctions {
@@ -22,40 +21,96 @@ public class Auctions {
     @EJB
     AuctionDAO auctionDao;
 
+    @EJB
+    ProductDAO productDAO;
+
     @WebMethod
     public List<Auction> getAllAuctions() {
         return auctionDao.getAllAuctions();
     }
 
-    //Get All unfinished Auctions
+
     @WebMethod
-    public List<Auction> getAuctions() { // No security implemented, should be implemented here
-        return auctionDao.runningAuctions();
+    public List<Auction> getActiveAuctions() {
+        List<Auction> activeAuctions = auctionDao.getActiveAuctions();
+
+        if (activeAuctions != null) {
+            return activeAuctions;
+        } else {
+            return new ArrayList<>();
+        }
+
     }
 
-    //Get a specific auction
     @WebMethod
-    public Auction findAuction(String id) {
-        int idInt = Integer.parseInt(id);
-        return auctionDao.findAuction(idInt);
+    public Auction findAuction(int id) {
+        Auction auction = auctionDao.find(id);
+
+        if (auction != null) {
+            return auction;
+        } else {
+            return new Auction(); // empty response.
+        }
+    }
+
+    @WebMethod
+    public List<Bid> getAuctionBids(int auctionId) {
+        return auctionDao.getAllBidsFromAuction(auctionId);
+    }
+
+    /**
+     * Places a bid on an auction.
+     *
+     * @param auctionId
+     * @param userId
+     * @param amount
+     * @return boolean
+     */
+    @WebMethod
+    public boolean placeBid(int auctionId, int userId, double amount) {
+
+        Auction auction = auctionDao.find(auctionId);
+
+        //User user = userDao.find(userId);
+        User user = new User();
+
+
+        // If no auction or no user or the bid is a negative amount:
+        if (auction == null || user == null || amount <= 0) {
+            return false;
+        }
+
+        Bid highestBid = auction.findHighestBid();
+
+        if (amount <= highestBid.getAmount()) {
+            return false;
+        }
+
+        Bid bid = new Bid(auction, user, amount);
+        auction.getBids().add(bid);
+
+        return auctionDao.persist(auction);
     }
 
     // Create a new auction
-    public boolean newAuction(Product product, double startingPrice, double buyoutPrice, long startTime, long length) {
-        Auction a = new Auction();
-        a.setProduct(product);
-        a.setStartingPrice(startingPrice);
-        a.setBuyoutPrice(buyoutPrice);
-        a.setStartTime(startTime); // should work if null
-        a.setLength(length);
+    @WebMethod
+    public boolean createAuction(int productId, double startingPrice, double buyoutPrice, long startTime, long length) {
 
-       return auctionDao.persistAuction(a); // cascade return
+        Product product = productDAO.find(productId);
+
+        if (product == null) {
+            return false;
+        }
+
+        Auction auction = new Auction(product, startingPrice, buyoutPrice, startTime, length);
+
+        return auctionDao.persist(auction);
     }
 
     //Publish an auction
-    public boolean publishAuction(String id){
+    private boolean publishAuction(String id) {
         int idInt = Integer.parseInt(id);
-        Auction a = auctionDao.findAuction(idInt);
+        Auction a = auctionDao.find(idInt);
         Date date = new Date(); // Thread safety problem
         long now = date.getTime();
         a.setStartTime(now);
@@ -63,50 +118,19 @@ public class Auctions {
         return auctionDao.updateAuction(a); // cascade return
     }
 
-    //Get a specific users auctions
-    public List<Auction> auctions(String usersId){
-        int userId = Integer.parseInt(usersId);
-
-        return auctionDao.usersAuctions(userId);
-    }
-
     //Get all bids from an auction
-    public List<Bid> auctionBids(String id) {
+    private List<Bid> auctionBids(String id) {
         int idInt = Integer.parseInt(id);
 
-        return auctionDao.allBidsFromAuction(idInt);
+        return auctionDao.getAllBidsFromAuction(idInt);
     }
 
     //get a specific known bid from an auction
-    public Bid auctionBid(String aid, String bid) {
+    private Bid auctionBid(String aid, String bid) {
         int auctionId = Integer.parseInt(aid);
         int bidId = Integer.parseInt(bid);
 
         return auctionDao.bidFromAuction(auctionId, bidId);
     }
 
-    //TODO move to participateEJB
-    //Place a bid
-  /*  public Bid placeBid(String id, String userIdString, String amountString) {
-        int auctionId = Integer.parseInt(id);
-        Auction auction = em.find(Auction.class, auctionId);
-        int userId = Integer.parseInt(userIdString);
-        User user = em.find(User.class, userId);
-        double amount = Double.parseDouble(amountString);
-
-        // If: no auction or no user or the bid is a negative amount
-        if (auction == null || user == null || amount <= 0 ) {
-            return null; //Illegal action
-        }
-
-        Bid bid = new Bid(auction, user, amount);
-        auction.getBids().add(bid);
-
-        em.persist(auction);
-        user.getBids().add(bid);
-        em.persist(user);
-        em.persist(bid);
-
-        return bid;
-    }*/
 }

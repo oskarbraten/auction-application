@@ -32,10 +32,13 @@ public class AuctionDAO {
         }
     }
 
-    /** Returns All unfinished Auctions */
-    public List<Auction> runningAuctions() {
-        Date date = new Date(); // Thread safety problem
-        long now = date.getTime();
+    /**
+     * Returns a list of active Auctions.
+     * @return List<Auction>
+     */
+    public List<Auction> getActiveAuctions() {
+
+        long now = new Date().getTime();
 
         Query query = em.createQuery("SELECT a from auction a WHERE a.startTime != null AND a.startTime < ?1 AND (a.startTime + a.length) > ?1 ", Auction.class)
                 .setParameter(1, now);
@@ -44,6 +47,7 @@ public class AuctionDAO {
         } catch (Exception e){
             return null;
         }
+
     }
 
     /**
@@ -51,12 +55,12 @@ public class AuctionDAO {
      * @param id
      * @return
      */
-    public Auction findAuction(int id) {
+    public Auction find(int id) {
         return em.find(Auction.class, id);
     }
 
     /** Add an auction to the database */
-    public boolean persistAuction(Auction a) {
+    public boolean persist(Auction a) {
         try {
             em.persist(a);
             return true;
@@ -89,8 +93,12 @@ public class AuctionDAO {
         }
     }
 
-    /** Returns all bids connected to an auction */
-    public List<Bid> allBidsFromAuction(int id) {
+    /**
+     * Returns all bids placed on an auction.
+     * @param id Id of the auction.
+     * @return
+     */
+    public List<Bid> getAllBidsFromAuction(int id) {
         Auction auction = em.find(Auction.class, id);
 
         if (auction != null) { // If auction exist

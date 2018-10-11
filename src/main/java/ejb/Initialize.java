@@ -8,6 +8,8 @@ import javax.persistence.PersistenceContext;
 
 import entities.*;
 
+import java.util.Date;
+
 /**
  * Singleton JE Bean creating and persisting a test dataset at application startup
  */
@@ -42,8 +44,9 @@ public class Initialize {
 		// Auction(Product product, double startingPrice, double buyoutPrice, long length) {
 		// Auction(Product product, double startingPrice, double buyoutPrice, long startTime, long length)
 		Auction auction1 = new Auction(bitcoinPick, 10, 12.89, 24);
-		Auction auction2 = new Auction(bitcoinPick, 12.89, 12.89,27092018, 24);
-		Auction auction3 = new Auction(velocipede, 79, 179, 27092018, 48);
+		Auction auction2 = new Auction(bitcoinPick, 12.89, 12.89, new Date().getTime(), 1000 * 60 * 60);
+		Auction auction3 = new Auction(velocipede, 79, 179, new Date().getTime() + 1000 * 60 * 2, 1000 * 60 * 60);
+
 		
 		/** Bids */
 		// Bid(Auction auction, User user, Double amount)

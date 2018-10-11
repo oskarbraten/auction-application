@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -28,7 +22,7 @@ public class Auction {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Product product;
 	
 	@OneToMany(mappedBy = "auction")
@@ -65,17 +59,19 @@ public class Auction {
 
 	/** Data services */
 	public boolean isPublished() {
-		Date now = new Date(); //Not thread safe! Unnecessary resource allocation?
+
+		long now =  new Date().getTime();
+
 		if (startTime == null) { //No start time has been set
 			return false;
-		}else if (startTime > now.getTime()) { //If the start date is after (>) current date
+		}else if (startTime > now) { //If the start date is after (>) current date
 			return false;
 		} else { //The start date is in the past so it's published.
 			return true;
 		}
 	}
 
-	public boolean isfinished() {
+	public boolean isFinished() {
 		Date now = new Date(); //Not thread safe! Unnecessary resource allocation?
 		if (startTime == null) { //No start time has been set, not started means not finished
 			return false;
@@ -91,7 +87,7 @@ public class Auction {
      *
      * @return Bid
      */
-    public Bid highestBid() {
+    public Bid findHighestBid() {
 
         double highestBid = Double.MIN_VALUE;
         Bid bid = null;
