@@ -23,14 +23,13 @@ public class AuctionDAO {
     private EntityManager em;
 
     /** TEST METHOD returns all auctions */
-    public List<Auction> allAuctions() {
-       /* Query query = em.createQuery("SELECT a from auction a");
+    public List<Auction> getAllAuctions() {
+       Query query = em.createQuery("SELECT a from auction a");
         try {
             return query.getResultList();
         } catch (Exception e){
             return null;
-        }*/
-       return null;
+        }
     }
 
     /** Returns All unfinished Auctions */
