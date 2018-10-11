@@ -16,8 +16,8 @@ import java.util.List;
  * Class implementing the Browse Auction Use Case
  */
 
-@WebService(serviceName = "AuctionsSOAP")
-public class AuctionsSOAP {
+@WebService(serviceName = "Auctions")
+public class Auctions {
 
     @EJB
     AuctionDAO auctionDao;
@@ -36,10 +36,6 @@ public class AuctionsSOAP {
     //Get a specific auction
     @WebMethod
     public Auction findAuction(String id) {
-        if (id == null){
-            // throw new Exception("ID not found");
-            System.out.println("Null value string");
-        }
         int idInt = Integer.parseInt(id);
         return auctionDao.findAuction(idInt);
     }
