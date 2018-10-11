@@ -66,40 +66,6 @@ public class Initialize {
 		
 		em.persist(bid1);
 		em.persist(bid2);
-		
-		
-//		try {
-			
-//		} catch (NamingException e) {// ONE TRUE Exception handler
-//			if (Desktop.isDesktopSupported()) {
-//			    try {
-//					Desktop.getDesktop().browse(new URI("https://stackoverflow.com/search?q=[js] + " + e.getMessage()));
-//				} catch (IOException e1) {
-//					System.out.println("Give up and go home!");
-//				} catch (URISyntaxException e1) {
-//					System.out.println("Give up and go home!");
-//				} 
-//			}
-//			else {
-//			System.out.println("Give up and go home!");
-//			// e.printStackTrace();
-//			}
-//		}
-		
-//		catch (JMSException e) {
-//			if (Desktop.isDesktopSupported()) {
-//			    try {
-//					Desktop.getDesktop().browse(new URI("https://stackoverflow.com/search?q=[js] + " + e.getMessage()));
-//				} catch (IOException e1) {
-//					System.out.println("Give up and go home!");
-//				} catch (URISyntaxException e1) {
-//					System.out.println("Give up and go home!");
-//				} 
-//			}
-//			else {
-//			System.out.println("Give up and go home!");
-//			// e.printStackTrace();
-//			}
-//		}
+
 	}
 }
