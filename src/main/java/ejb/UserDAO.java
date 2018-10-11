@@ -13,7 +13,7 @@ import java.util.List;
  * Database Access Object
  * Handles all database transactions for User and Product
  *
- * For address, ask a user
+ * For a users address or rating, ask that user
  */
 
 @Stateless
