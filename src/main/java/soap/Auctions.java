@@ -36,10 +36,6 @@ public class Auctions {
     //Get a specific auction
     @WebMethod
     public Auction findAuction(String id) {
-        if (id == null){
-            // throw new Exception("ID not found");
-            System.out.println("Null value string");
-        }
         int idInt = Integer.parseInt(id);
         return auctionDao.findAuction(idInt);
     }
