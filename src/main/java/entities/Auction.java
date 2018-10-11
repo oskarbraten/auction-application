@@ -86,9 +86,26 @@ public class Auction {
 		}
 	}
 
-	public Bid highestBid(){
-	    //TODO implement method boddy
-	    return null;
+    /**
+     * returns the highest bid value
+     *
+     * @return Bid
+     */
+    public Bid highestBid() {
+
+        double highestBid = Double.MIN_VALUE;
+        Bid bid = null;
+
+        for (int i = 0; i < bids.size(); i++) {
+
+            if (highestBid < bids.get(i).getAmount()) {
+
+                highestBid = bids.get(i).getAmount();
+                bid = bids.get(i);
+            }
+        }
+
+        return bid;
     }
 	
 	public void setId(Integer id) {
