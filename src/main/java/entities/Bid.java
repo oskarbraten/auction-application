@@ -41,6 +41,7 @@ public class Bid {
 		super();
 		this.auction = auction;
 		this.user = user;
+		user.getBids().add(this);
 		this.amount = amount;
 	}
 

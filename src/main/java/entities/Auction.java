@@ -22,10 +22,10 @@ public class Auction {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	private Product product;
 	
-	@OneToMany(mappedBy = "auction")
+	@OneToMany(mappedBy = "auction", cascade = CascadeType.PERSIST)
 	private List<Bid> bids;
 	
 	@OneToOne
@@ -42,6 +42,7 @@ public class Auction {
 
 	public Auction(Product product, double startingPrice, double buyoutPrice, long length) {
 		this.product = product;
+		product.getAuctions().add(this);
 		this.startingPrice = startingPrice;
 		this.buyoutPrice = buyoutPrice;
 		this.length = length;
@@ -50,6 +51,7 @@ public class Auction {
 
 	public Auction(Product product, double startingPrice, double buyoutPrice, long startTime, long length) {
 		this.product = product;
+        product.getAuctions().add(this);
 		this.startingPrice = startingPrice;
 		this.buyoutPrice = buyoutPrice;
 		this.startTime = startTime;

@@ -2,6 +2,7 @@ package soap;
 
 import ejb.AuctionDAO;
 import ejb.ProductDAO;
+import ejb.UserDAO;
 import entities.Auction;
 import entities.Bid;
 import entities.Product;
@@ -19,20 +20,23 @@ import java.util.List;
 public class Auctions {
 
     @EJB
-    AuctionDAO auctionDao;
+    AuctionDAO auctionDAO;
 
     @EJB
     ProductDAO productDAO;
 
+    @EJB
+    UserDAO userDAO;
+
     @WebMethod
     public List<Auction> getAllAuctions() {
-        return auctionDao.getAllAuctions();
+        return auctionDAO.getAllAuctions();
     }
 
 
     @WebMethod
     public List<Auction> getActiveAuctions() {
-        List<Auction> activeAuctions = auctionDao.getActiveAuctions();
+        List<Auction> activeAuctions = auctionDAO.getActiveAuctions();
 
         if (activeAuctions != null) {
             return activeAuctions;
@@ -44,7 +48,7 @@ public class Auctions {
 
     @WebMethod
     public Auction findAuction(int id) {
-        Auction auction = auctionDao.find(id);
+        Auction auction = auctionDAO.find(id);
 
         if (auction != null) {
             return auction;
@@ -55,7 +59,7 @@ public class Auctions {
 
     @WebMethod
     public List<Bid> getAuctionBids(int auctionId) {
-        return auctionDao.getAllBidsFromAuction(auctionId);
+        return auctionDAO.getAllBidsFromAuction(auctionId);
     }
 
     /**
@@ -69,10 +73,9 @@ public class Auctions {
     @WebMethod
     public boolean placeBid(int auctionId, int userId, double amount) {
 
-        Auction auction = auctionDao.find(auctionId);
+        Auction auction = auctionDAO.find(auctionId);
 
-        //User user = userDao.find(userId);
-        User user = new User();
+        User user = userDAO.find(userId);
 
 
         // If no auction or no user or the bid is a negative amount:
@@ -80,16 +83,22 @@ public class Auctions {
             return false;
         }
 
+        if (!auction.isPublished() || auction.isFinished()) {
+            return false;
+        }
+
         Bid highestBid = auction.findHighestBid();
 
-        if (amount <= highestBid.getAmount()) {
+        if (highestBid != null && amount <= highestBid.getAmount()) {
             return false;
         }
 
         Bid bid = new Bid(auction, user, amount);
-        auction.getBids().add(bid);
 
-        return auctionDao.persist(auction);
+        auction.getBids().add(bid);
+        user.getBids().add(bid);
+
+        return (auctionDAO.persist(auction) && userDAO.persist(user));
     }
 
     // Create a new auction
@@ -104,25 +113,25 @@ public class Auctions {
 
         Auction auction = new Auction(product, startingPrice, buyoutPrice, startTime, length);
 
-        return auctionDao.persist(auction);
+        return auctionDAO.persist(auction);
     }
 
     //Publish an auction
     private boolean publishAuction(String id) {
         int idInt = Integer.parseInt(id);
-        Auction a = auctionDao.find(idInt);
+        Auction a = auctionDAO.find(idInt);
         Date date = new Date(); // Thread safety problem
         long now = date.getTime();
         a.setStartTime(now);
 
-        return auctionDao.updateAuction(a); // cascade return
+        return auctionDAO.updateAuction(a); // cascade return
     }
 
     //Get all bids from an auction
     private List<Bid> auctionBids(String id) {
         int idInt = Integer.parseInt(id);
 
-        return auctionDao.getAllBidsFromAuction(idInt);
+        return auctionDAO.getAllBidsFromAuction(idInt);
     }
 
     //get a specific known bid from an auction
@@ -130,7 +139,7 @@ public class Auctions {
         int auctionId = Integer.parseInt(aid);
         int bidId = Integer.parseInt(bid);
 
-        return auctionDao.bidFromAuction(auctionId, bidId);
+        return auctionDAO.bidFromAuction(auctionId, bidId);
     }
 
 }

@@ -34,7 +34,7 @@ public class UserDAO {
     }
 
     /** Returns a user */
-    public User findUser(int id){
+    public User find(int id){
         return em.find(User.class, id);
     }
 
@@ -50,7 +50,7 @@ public class UserDAO {
     }
 
     /** Persists a user */
-    public boolean persistUser(User u){
+    public boolean persist(User u){
         try {
             em.persist(u);
             return true;

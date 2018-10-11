@@ -43,6 +43,7 @@ public class Product {
 		this.features = features;
 		this.picture = picture;
 		this.user = user;
+		user.getProducts().add(this);
 
 		this.auctions = new ArrayList<Auction>();
 	}

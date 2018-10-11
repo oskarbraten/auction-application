@@ -39,19 +39,13 @@ public class Initialize {
 				player2);
 		Product velocipede = new Product("Velocipede", "Experience the JOY of historic cycling. Guaranteed to give you an unforgetable experience, Health inshurance not included",
 				"Has wheels, Purple finish", "https://cdn3.vectorstock.com/i/1000x1000/88/62/velocipede-vector-948862.jpg", player1);
-		
+
 		/** Auctions */
 		// Auction(Product product, double startingPrice, double buyoutPrice, long length) {
 		// Auction(Product product, double startingPrice, double buyoutPrice, long startTime, long length)
 		Auction auction1 = new Auction(bitcoinPick, 10, 12.89, 24);
 		Auction auction2 = new Auction(bitcoinPick, 12.89, 12.89, new Date().getTime(), 1000 * 60 * 60);
 		Auction auction3 = new Auction(velocipede, 79, 179, new Date().getTime() + 1000 * 60 * 2, 1000 * 60 * 60);
-
-		
-		/** Bids */
-		// Bid(Auction auction, User user, Double amount)
-		Bid bid1 = new Bid(auction2, player1, 12.00);
-		Bid bid2 = new Bid(auction2, player1, 12.89);
 		
 		/** Feedback */
 		
@@ -59,16 +53,6 @@ public class Initialize {
 		
 		em.persist(player1);
 		em.persist(player2);
-		
-		em.persist(bitcoinPick);
-		em.persist(velocipede);
-		
-		em.persist(auction1);
-		em.persist(auction2);
-		em.persist(auction3);
-		
-		em.persist(bid1);
-		em.persist(bid2);
 
 	}
 }
