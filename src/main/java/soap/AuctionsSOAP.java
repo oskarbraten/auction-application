@@ -19,12 +19,13 @@ import java.util.List;
 @WebService(serviceName = "AuctionsSOAP")
 public class AuctionsSOAP {
 
-    /* Entity Manager*/
-    //@PersistenceContext(unitName = "AuctionApplicationPU")
-    //private EntityManager em;
-
     @EJB
     AuctionDAO auctionDao;
+
+    @WebMethod
+    public List<Auction> getAllAuctions() {
+        return auctionDao.getAllAuctions();
+    }
 
     //Get All unfinished Auctions
     @WebMethod
@@ -36,7 +37,7 @@ public class AuctionsSOAP {
     @WebMethod
     public Auction findAuction(String id) {
         if (id == null){
-            //hrow new Exception("ID not found");
+            // throw new Exception("ID not found");
             System.out.println("Null value string");
         }
         int idInt = Integer.parseInt(id);
