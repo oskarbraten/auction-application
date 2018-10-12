@@ -61,7 +61,6 @@ public class Auction {
 
 	/** Data services */
 	public boolean isPublished() {
-
 		long now =  new Date().getTime();
 
 		if (startTime == null) { //No start time has been set
@@ -75,13 +74,25 @@ public class Auction {
 
 	public boolean isFinished() {
 		Date now = new Date(); //Not thread safe! Unnecessary resource allocation?
-		if (startTime == null) { //No start time has been set, not started means not finished
+
+		if (startTime == null || startTime > now.getTime()) { //No started
 			return false;
-		}else if (startTime + length > now.getTime()) { //If the current time is less than start time plus running time
-			return false;
+		//is started
+		}else if (startTime + length > now.getTime()) { // Not finished
+            return false;
+        //Is started not finished
 		} else { //The auction has started and run for it's intended time
 			return true;
 		}
+	}
+
+	public boolean isBoughtOut() {
+		Bid highest = findHighestBid();
+
+		if (highest != null && highest.getAmount() >= buyoutPrice){
+			return true;
+		}
+		return false;
 	}
 
     /**
