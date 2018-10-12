@@ -95,11 +95,6 @@ public class Auction {
 		return false;
 	}
 
-    /**
-     * returns the highest bid value
-     *
-     * @return Bid
-     */
     public Bid findHighestBid() {
 
         double highestBid = Double.MIN_VALUE;
