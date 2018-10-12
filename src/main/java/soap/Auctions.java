@@ -87,7 +87,7 @@ public class Auctions {
             return false;
         }
 
-        if (!auction.isPublished() || auction.isFinished()) {
+        if (!auction.isPublished() || auction.isFinished() || auction.isBoughtOut()) {
             return false;
         }
 
@@ -111,7 +111,7 @@ public class Auctions {
 
         Product product = productDAO.find(productId);
 
-        if (product == null) {
+        if (product == null || startingPrice <= 0 || buyoutPrice > startingPrice || length > 0 ) {
             return false;
         }
 
