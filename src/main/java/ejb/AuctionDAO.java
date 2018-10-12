@@ -70,13 +70,15 @@ public class AuctionDAO {
     }
 
     /** Update the information stored in the database for an Auction object */
-    public boolean updateAuction(Auction a){
+    public boolean update(Auction a){
         try {
             em.getTransaction().begin();
             em.merge(a);
             em.getTransaction().commit();
             return true;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getStackTrace());
             return false;
         }
     }

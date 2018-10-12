@@ -1,6 +1,7 @@
 package soap;
 
 import ejb.AuctionDAO;
+import ejb.BidDAO;
 import ejb.ProductDAO;
 import ejb.UserDAO;
 import entities.Auction;
@@ -27,6 +28,9 @@ public class Auctions {
 
     @EJB
     UserDAO userDAO;
+
+    @EJB
+    BidDAO bidDAO;
 
     @WebMethod
     public List<Auction> getAllAuctions() {
@@ -98,7 +102,7 @@ public class Auctions {
         auction.getBids().add(bid);
         user.getBids().add(bid);
 
-        return (auctionDAO.persist(auction) && userDAO.persist(user));
+        return bidDAO.persist(bid);
     }
 
     // Create a new auction
@@ -124,7 +128,7 @@ public class Auctions {
         long now = date.getTime();
         a.setStartTime(now);
 
-        return auctionDAO.updateAuction(a); // cascade return
+        return auctionDAO.update(a); // cascade return
     }
 
     //Get all bids from an auction

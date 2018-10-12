@@ -50,7 +50,6 @@ public class Initialize {
 		/** Feedback */
 		
 		/** Persist elements */
-		
 		em.persist(player1);
 		em.persist(player2);
 
