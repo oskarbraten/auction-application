@@ -13,10 +13,9 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @Entity(name = "\"user\"")
 public class User {
-	
-	/** Variables */
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@OneToOne(cascade = CascadeType.PERSIST)
@@ -32,7 +31,6 @@ public class User {
 	private String name;
 	private String phone;
 
-	/** Constructors */
 	public User() {}
 
 	public User(String email, String name, String phone, Address address) {
@@ -41,8 +39,8 @@ public class User {
 		this.phone = phone;
 		this.address = address;
 		
-		this.products = new ArrayList<Product>();
-		this.bids = new ArrayList<Bid>();
+		this.products = new ArrayList<>();
+		this.bids = new ArrayList<>();
 	}
 
 	/** Data services */

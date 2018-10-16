@@ -14,9 +14,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 public class Address {
 
-    /** Variables */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String street;
@@ -25,10 +24,8 @@ public class Address {
     private String postalCode; // Maybe change to String?
     private String country; // Using ISO3166-1 letter codes to make it a locale enum type
 
-    /** Constructor */
-    public Address(){
+    public Address() {}
 
-    }
     public Address(String street, String city, String county, String postalCode, String country){
         this.street = street;
         this.city = city;

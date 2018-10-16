@@ -18,9 +18,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 public class Bid {
 
-	/** Variables */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@ManyToOne
@@ -33,16 +32,15 @@ public class Bid {
 
 	private Double amount;
 
-	/** Constructor */
-	public Bid() {
-	}
+	public Bid() {}
 
 	public Bid(Auction auction, User user, Double amount) {
-		super();
 		this.auction = auction;
 		this.user = user;
-		user.getBids().add(this);
 		this.amount = amount;
+
+		user.getBids().add(this);
+        auction.getBids().add(this);
 	}
 
 	/** Data services */

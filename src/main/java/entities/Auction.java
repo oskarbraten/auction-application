@@ -1,12 +1,11 @@
 package entities;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Persistent class for the User database table. Class and system entity
@@ -16,10 +15,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity(name = "auction")
 @XmlRootElement
 public class Auction {
-	
-	/** Variables */
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@ManyToOne
@@ -36,27 +34,27 @@ public class Auction {
 	private Long startTime;
 	private Long length;
 
-	/** Constructor */
-	public Auction() {
-	}
+	public Auction() {}
 
 	public Auction(Product product, double startingPrice, double buyoutPrice, long length) {
 		this.product = product;
-		product.getAuctions().add(this);
 		this.startingPrice = startingPrice;
 		this.buyoutPrice = buyoutPrice;
 		this.length = length;
 		this.bids = new ArrayList<>();
+
+        product.getAuctions().add(this);
 	}
 
 	public Auction(Product product, double startingPrice, double buyoutPrice, long startTime, long length) {
 		this.product = product;
-        product.getAuctions().add(this);
 		this.startingPrice = startingPrice;
 		this.buyoutPrice = buyoutPrice;
 		this.startTime = startTime;
 		this.length = length;
 		this.bids = new ArrayList<>();
+
+        product.getAuctions().add(this);
 	}
 
 	/** Data services */
@@ -71,6 +69,10 @@ public class Auction {
 			return true;
 		}
 	}
+
+    public void publish() {
+	    this.startTime = new Date().getTime();
+    }
 
 	public boolean isFinished() {
 		Date now = new Date(); //Not thread safe! Unnecessary resource allocation?
@@ -94,6 +96,10 @@ public class Auction {
 		}
 		return false;
 	}
+
+	public boolean isComplete() {
+	    return (isFinished() || isBoughtOut());
+    }
 
     public Bid findHighestBid() {
 
@@ -177,4 +183,5 @@ public class Auction {
 	public void setLength(Long length) {
 		this.length = length;
 	}
+
 }

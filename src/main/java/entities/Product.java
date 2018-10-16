@@ -17,9 +17,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 public class Product {
 
-	/** Variables */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
@@ -34,9 +33,7 @@ public class Product {
 	private String features;
 	private String picture;
 
-	/** Constructors */
-	public Product() {
-	}
+	public Product() {}
 
 	public Product(String name, String description, String features, String picture, User user) {
 		this.name = name;
@@ -46,7 +43,7 @@ public class Product {
 		this.user = user;
 		user.getProducts().add(this);
 
-		this.auctions = new ArrayList<Auction>();
+		this.auctions = new ArrayList<>();
 	}
 	
 	/** Data services */

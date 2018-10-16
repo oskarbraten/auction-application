@@ -11,9 +11,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity(name = "feedback")
 public class Feedback {
 
-	/** Variables */
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@OneToOne(mappedBy = "feedback")
@@ -27,11 +26,9 @@ public class Feedback {
 	private Integer sellerRating;
 	private Integer productRating;
 
-	/** Constructors */
 	public Feedback() {}
 
 	public Feedback(Auction auction, User user, String text, int sellerRating, int productRating) {
-		super();
 		this.auction = auction;
 		this.user = user;
 		this.text = text;

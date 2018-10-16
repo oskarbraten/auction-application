@@ -1,4 +1,4 @@
-package ejb;
+package ejb.dao;
 
 import entities.Product;
 
@@ -9,12 +9,13 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class ProductDAO {
 
-    /* Entity Manager*/
     @PersistenceContext(unitName = "AuctionApplicationPU")
     private EntityManager em;
 
     public Product find(int id) {
+
         return em.find(Product.class, id);
+
     }
 
 }
