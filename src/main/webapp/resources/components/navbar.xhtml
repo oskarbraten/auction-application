@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+        xmlns:c="http://java.sun.com/jsp/jstl/core">
+<f:view>
+    <composite:interface>
+        <composite:attribute name="loggedIn" required="true"/>
+    </composite:interface>
+    <composite:implementation>
+
+        <div class="navbar navbar-light bg-light">
+
+            <div class="container">
+
+                <a class="navbar-brand">AuctionApplication</a>
+
+                <c:if test="${cc.attrs.loggedIn}">
+
+                    <div class="d-flex justify-content-end">
+
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#">My account</a>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                </c:if>
+
+            </div>
+
+        </div>
+
+    </composite:implementation>
+</f:view>
+</html>

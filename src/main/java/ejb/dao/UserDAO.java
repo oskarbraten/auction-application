@@ -21,7 +21,7 @@ public class UserDAO {
 
     public List<User> findAllUsers() {
 
-        Query query = em.createQuery("SELECT u from user u");
+        Query query = em.createQuery("SELECT u FROM user u");
 
         try {
             return query.getResultList();
@@ -31,9 +31,9 @@ public class UserDAO {
 
     }
 
-    public User find(int id) {
+    public User find(String username) {
 
-        return em.find(User.class, id);
+        return em.find(User.class, username);
 
     }
 

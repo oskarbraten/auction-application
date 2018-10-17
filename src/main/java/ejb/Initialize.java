@@ -29,12 +29,12 @@ public class Initialize {
 		Address address2 = new Address("Sesame Street -5", "Sin City", "Lost County" , "BBQ4U", "SJM");
 
 		/** New Users */
-		User user1 = new User("test@test.no", "Test Testosteron", "43214321", address1);
-		User user2 = new User("seller@meow.cat", "Meow Cat", "12341234", address2);
+		User user1 = new User("test", "test", "test@test.no", "Test Testosteron", "43214321", address1);
+		User user2 = new User("meow", "meow", "seller@meow.cat", "Meow Cat", "12341234", address2);
 
 		/** Products */
 		// Product(String name, String description, String features, String picture, User user)
-		Product bitcoinPick = new Product("Bitcoin Mining Pick", "Pickaxe for bitcoin mining. Get you pick and start mining TODAY",
+		Product bitcoinPick = new Product("Bitcoin Mining Pick", "Pickaxe for bitcoin mining. Get you pick and start mining TODAY!",
 				"Ergonomic design, Efficient form, ECO Friendly", "https://image.shutterstock.com/image-vector/bitcoin-cryptocurrency-mining-pickaxe-minimal-450w-675558532.jpg",
 				user2);
 		Product velocipede = new Product("Velocipede", "Experience the JOY of historic cycling. Guaranteed to give you an unforgettable experience, Health insurance not included",

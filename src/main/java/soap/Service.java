@@ -64,9 +64,9 @@ public class Service {
     }
 
     @WebMethod
-    public Bid placeBid(int auctionId, int userId, double amount) {
+    public Bid placeBid(int auctionId, String username, double amount) {
 
-        return auctionManager.placeBid(auctionId, userId, amount);
+        return auctionManager.placeBid(auctionId, username, amount);
 
     }
 

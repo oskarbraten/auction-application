@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+    <ui:include src="./resources/head.xhtml"/>
+    <title>Login</title>
+</h:head>
+
+<h:body>
+
+    <div class="container">
+
+        <div class="row justify-content-md-center mt-4">
+
+            <div class="col col-lg-3">
+
+                <h:form>
+
+                    <h3>Login</h3>
+
+                    <div class="form-group">
+                        <label><h:outputText value="Username"/></label>
+                        <h:inputText styleClass="form-control" id="username" value="#{username}"></h:inputText>
+                    </div>
+
+                    <div class="form-group">
+                        <label><h:outputText value="Password"/></label>
+                        <h:inputSecret styleClass="form-control" id="password" value="#{password}"></h:inputSecret>
+                    </div>
+
+                    <h:commandButton styleClass="btn btn-primary" action="#{userController.login(username, password)}"
+                                     value="Login"></h:commandButton>
+
+                </h:form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</h:body>
+
+</html>

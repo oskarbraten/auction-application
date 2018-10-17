@@ -11,10 +11,12 @@ import entities.User;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Named;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Stateless
+@Named(value = "auctionManager")
 public class AuctionManager {
 
     @EJB
@@ -88,7 +90,7 @@ public class AuctionManager {
 
     }
 
-    public Bid placeBid(int auctionId, int userId, double amount) {
+    public Bid placeBid(int auctionId, String username, double amount) {
 
         Auction auction = auctionDAO.find(auctionId);
 
@@ -104,7 +106,7 @@ public class AuctionManager {
             throw new AuctionApplicationException("Amount must be larger than starting price.", Response.Status.BAD_REQUEST);
         }
 
-        User user = userDAO.find(userId);
+        User user = userDAO.find(username);
 
         if (user == null) {
             throw new AuctionApplicationException("User with specified 'userId' was not found.", Response.Status.NOT_FOUND);

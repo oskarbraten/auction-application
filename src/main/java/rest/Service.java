@@ -59,11 +59,11 @@ public class Service {
     @Path("{id}/bids")
     public Bid placeBid(
             @PathParam("id") int auctionId,
-            @FormParam("userId") int userId,
+            @FormParam("userId") String username,
             @FormParam("amount") double amount
     ) {
 
-        return auctionManager.placeBid(auctionId, userId, amount);
+        return auctionManager.placeBid(auctionId, username, amount);
 
     }
 }
