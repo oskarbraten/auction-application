@@ -1,11 +1,14 @@
 package ejb.dao;
 
+import ejb.exceptions.AuctionApplicationException;
+import entities.Product;
 import entities.User;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -33,7 +36,11 @@ public class UserDAO {
 
     public User find(String username) {
 
-        return em.find(User.class, username);
+        try {
+            return em.find(User.class, username);
+        } catch (IllegalArgumentException e) {
+            throw new AuctionApplicationException("Invalid PK for User supplied.", Response.Status.BAD_REQUEST);
+        }
 
     }
 

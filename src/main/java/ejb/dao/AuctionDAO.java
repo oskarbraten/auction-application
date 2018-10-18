@@ -1,5 +1,6 @@
 package ejb.dao;
 
+import ejb.exceptions.AuctionApplicationException;
 import entities.Auction;
 import entities.Bid;
 
@@ -7,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +20,11 @@ public class AuctionDAO {
 
     public Auction find(int id) {
 
-        return em.find(Auction.class, id);
+        try {
+            return em.find(Auction.class, id);
+        } catch (IllegalArgumentException e) {
+            throw new AuctionApplicationException("Invalid PK for Auction supplied.", Response.Status.BAD_REQUEST);
+        }
 
     }
 

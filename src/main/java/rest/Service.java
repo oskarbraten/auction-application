@@ -59,7 +59,7 @@ public class Service {
     @Path("{id}/bids")
     public Bid placeBid(
             @PathParam("id") int auctionId,
-            @FormParam("userId") String username,
+            @FormParam("username") String username,
             @FormParam("amount") double amount
     ) {
 

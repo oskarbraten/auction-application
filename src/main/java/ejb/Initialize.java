@@ -43,7 +43,7 @@ public class Initialize {
 		/** Auctions */
 		Auction auction1 = new Auction(bitcoinPick, 10, 79, 1000 * 60 * 30);
 		Auction auction2 = new Auction(bitcoinPick, 20, 129.99, new Date().getTime(), 1000 * 60 * 60);
-		Auction auction3 = new Auction(velocipede, 79, 179, new Date().getTime() + 1000 * 60 * 2, 1000 * 60 * 60);
+		Auction auction3 = new Auction(velocipede, 79, 179, new Date().getTime() + 1000 * 10, 1000 * 60 * 60);
 		
 		/** Persist elements */
 		em.persist(user1);
