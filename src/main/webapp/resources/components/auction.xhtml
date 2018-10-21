@@ -6,7 +6,8 @@
         xmlns:f="http://xmlns.jcp.org/jsf/core"
         xmlns:composite="http://xmlns.jcp.org/jsf/composite"
         xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:c="http://java.sun.com/jsp/jstl/core">
+        xmlns:c="http://java.sun.com/jsp/jstl/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets">
 <f:view>
     <composite:interface>
         <composite:attribute name="auction" required="true"/>
@@ -15,7 +16,7 @@
 
         <c:set var="auction" value="#{cc.attrs.auction}"/>
 
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+        <a href="./auction.xhtml?id=${auction.id}" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
 
                 <h5 class="mb-1">${auction.product.name}</h5>
@@ -34,12 +35,13 @@
 
             <div class="d-flex w-100 justify-content-between">
 
-                <c:if test="#{highestBid != null}">
+                <ui:fragment rendered="#{not empty highestBid}">
                     <small>Highest bid: #{highestBid.amount}</small>
-                </c:if>
-                <c:otherwise>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{empty highestBid}">
                     <small>Starting price: #{auction.startingPrice}</small>
-                </c:otherwise>
+                </ui:fragment>
 
                 <small>Buyout price: <b>#{auction.buyoutPrice}</b></small>
 
