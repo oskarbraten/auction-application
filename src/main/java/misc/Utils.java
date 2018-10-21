@@ -22,4 +22,8 @@ public class Utils {
                 .getExternalContext().getResponse();
     }
 
+    public static FacesContext getContext() {
+        return (FacesContext) FacesContext.getCurrentInstance();
+    }
+
 }

@@ -16,9 +16,9 @@
 
     <div class="container">
 
-        <div class="row justify-content-md-center mt-4">
+        <div class="row justify-content-center align-items-center mt-4">
 
-            <div class="col col-lg-3">
+            <div class="col col-auto">
 
                 <h:form>
 
@@ -34,7 +34,7 @@
                         <h:inputSecret styleClass="form-control" id="password" value="#{password}"></h:inputSecret>
                     </div>
 
-                    <h:commandButton styleClass="btn btn-primary" action="#{userController.login(username, password)}"
+                    <h:commandButton styleClass="btn btn-primary" action="#{loginController.login(username, password)}"
                                      value="Login"></h:commandButton>
 
                 </h:form>

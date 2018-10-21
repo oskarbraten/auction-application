@@ -9,7 +9,6 @@ import entities.Bid;
 import entities.Product;
 import entities.User;
 
-import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Named;
@@ -102,7 +101,7 @@ public class AuctionManager {
         Bid highestBid = auction.findHighestBid();
 
         if (highestBid != null && amount <= highestBid.getAmount()) {
-            throw new AuctionApplicationException("Amount must be larger highest bid.", Response.Status.BAD_REQUEST);
+            throw new AuctionApplicationException("Amount must be larger than highest bid.", Response.Status.BAD_REQUEST);
         } else if (amount < auction.getStartingPrice()) {
             throw new AuctionApplicationException("Amount must be larger than starting price.", Response.Status.BAD_REQUEST);
         }

@@ -12,9 +12,9 @@
     <title>Auction Application</title>
 
 </h:head>
-<h:body onload="#{userController.redirect()}">
+<h:body onload="#{loginController.redirect()}">
 
-    <em:navbar loggedIn="#{userController.getUsername() != null}"/>
+    <em:navbar loggedIn="#{loginController.getUsername() != null}"/>
 
     <div class="container">
 

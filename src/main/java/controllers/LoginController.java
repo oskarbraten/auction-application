@@ -1,5 +1,6 @@
-package ejb;
+package controllers;
 
+import ejb.UserManager;
 import entities.User;
 import misc.ApplicationConstants;
 import misc.Utils;
@@ -12,9 +13,9 @@ import java.io.IOException;
 import java.io.Serializable;
 
 
-@Named(value = "userController")
+@Named(value = "loginController")
 @SessionScoped
-public class UserController implements Serializable {
+public class LoginController implements Serializable {
 
     @EJB
     UserManager userManager;

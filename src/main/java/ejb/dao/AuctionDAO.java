@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.core.Response;
-import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -56,15 +55,17 @@ public class AuctionDAO {
 
     public List<Auction> findActiveAuctions() {
 
-        long now = new Date().getTime();
+        // TODO: write a proper SQL query.
 
-        // TODO: extend to check if auction is completed (isFinished || isBoughtOut)
-        Query query = em.createQuery("SELECT a from auction a WHERE a.startTime != null AND a.startTime < ?1 AND (a.startTime + a.length) > ?1 ", Auction.class).setParameter(1, now);
-        try {
-            return query.getResultList();
-        } catch (Exception e) {
-            return null;
-        }
+        List<Auction> auctions = this.findAllAuctions();
 
+        auctions.removeIf(item -> {
+            if (item.isComplete() || !item.isPublished()) {
+                return true;
+            }
+            return false;
+        });
+
+        return auctions;
     }
 }
