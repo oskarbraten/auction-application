@@ -8,7 +8,6 @@ import entities.Bid;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("/auctions")
@@ -30,7 +29,7 @@ public class Service {
     @Path("{id}")
     public Auction getAuction(@PathParam("id") int id) {
 
-        return auctionManager.getActiveAuction(id);
+        return auctionManager.getPublishedAuction(id);
 
     }
 
@@ -39,7 +38,7 @@ public class Service {
     @Path("{id}/bids")
     public List<Bid> auctionBids(@PathParam("id") int id) throws AuctionApplicationException {
 
-        Auction auction = auctionManager.getActiveAuction(id);
+        Auction auction = auctionManager.getPublishedAuction(id);
         return auction.getBids();
 
     }
@@ -49,7 +48,7 @@ public class Service {
     @Path("{aid}/bids/{bid}")
     public Bid getAuctionBid(@PathParam("aid") int auctionId, @PathParam("bid") int bidId) {
 
-        return auctionManager.getActiveAuctionBid(auctionId, bidId);
+        return auctionManager.getAuctionBid(auctionId, bidId);
 
     }
 

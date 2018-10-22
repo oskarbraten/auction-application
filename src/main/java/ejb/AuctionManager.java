@@ -64,29 +64,15 @@ public class AuctionManager {
 
     }
 
-    public Auction getActiveAuction(int id) {
+    public Auction getPublishedAuction(int id) {
 
         Auction auction = auctionDAO.find(id);
 
-        if (auction != null && auction.isPublished() && !auction.isComplete()) {
+        if (auction != null && auction.isPublished()) {
             return auction;
         }
 
         throw new AuctionApplicationException("Auction was not found.", Response.Status.NOT_FOUND);
-
-    }
-
-    public Bid getActiveAuctionBid(int auctionId, int bidId) {
-
-        this.getActiveAuction(auctionId); // will throw if the auction does not exist or is not active.
-
-        Bid bid = auctionDAO.findBid(auctionId, bidId);
-
-        if (bid == null) {
-            throw new AuctionApplicationException("Bid was not found.", Response.Status.NOT_FOUND);
-        }
-
-        return bid;
 
     }
 
@@ -98,12 +84,14 @@ public class AuctionManager {
             throw new AuctionApplicationException("A published Auction with 'auctionId' was not found.", Response.Status.NOT_FOUND);
         }
 
-        Bid highestBid = auction.findHighestBid();
+        Bid highestBid = auction.getHighestBid();
 
         if (highestBid != null && amount <= highestBid.getAmount()) {
             throw new AuctionApplicationException("Amount must be larger than highest bid.", Response.Status.BAD_REQUEST);
         } else if (amount < auction.getStartingPrice()) {
             throw new AuctionApplicationException("Amount must be larger than starting price.", Response.Status.BAD_REQUEST);
+        } else if (amount >= auction.getBuyoutPrice()) {
+            throw new AuctionApplicationException("Amount must be less than buyout price.", Response.Status.BAD_REQUEST);
         }
 
         User user = userDAO.find(username);
@@ -114,6 +102,25 @@ public class AuctionManager {
 
         Bid bid = new Bid(auction, user, amount);
 
+        return bid;
+
+    }
+
+    public Bid buyout(int auctionId, String username) {
+
+        Auction auction = auctionDAO.find(auctionId);
+
+        if (auction == null || !auction.isPublished() || auction.isComplete()) {
+            throw new AuctionApplicationException("A published Auction with 'auctionId' was not found.", Response.Status.NOT_FOUND);
+        }
+
+        User user = userDAO.find(username);
+
+        if (user == null) {
+            throw new AuctionApplicationException("User with specified 'userId' was not found.", Response.Status.NOT_FOUND);
+        }
+
+        Bid bid = new Bid(auction, user, auction.getBuyoutPrice());
         return bid;
 
     }

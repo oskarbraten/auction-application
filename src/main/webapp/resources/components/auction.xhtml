@@ -1,51 +1,62 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        xmlns:composite="http://xmlns.jcp.org/jsf/composite"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:c="http://java.sun.com/jsp/jstl/core"
-        xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
 <f:view>
     <composite:interface>
         <composite:attribute name="auction" required="true"/>
+        <composite:attribute name="showAsUser" required="false"/>
     </composite:interface>
     <composite:implementation>
 
         <c:set var="auction" value="#{cc.attrs.auction}"/>
 
-        <a href="./auction.xhtml?id=${auction.id}" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
+        <a href="./auction.xhtml?id=${auction.id}"
+           class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="row">
+                <div class="col">
+                    <h5 class="mb-1">${auction.product.name}</h5>
+                    <small>
+                        <h:outputText value="#{auction.startTime}">
+                            <f:convertDateTime type="both" dateStyle="medium" timeStyle="medium"/>
+                        </h:outputText>
+                    </small>
+                    <p class="mb-1">${auction.product.description}</p>
+                </div>
+                <div class="col-auto">
+                    <p class="text-right">
+                        Buyout price: #{auction.buyoutPrice}<br/>
 
-                <h5 class="mb-1">${auction.product.name}</h5>
+                        <ui:fragment rendered="#{not empty auction.highestBid}">
+                            Highest bid: #{auction.highestBid.amount}<br/>
+                        </ui:fragment>
 
-                <small>
-                    <h:outputText value="#{auction.startTime}">
-                        <f:convertDateTime type="both" dateStyle="medium" timeStyle="medium"/>
-                    </h:outputText>
-                </small>
+                        <ui:fragment rendered="#{empty auction.highestBid}">
+                            Starting price: #{auction.startingPrice}<br/>
+                        </ui:fragment>
 
+                        <c:if test="${cc.attrs.showAsUser}">
+
+                            <c:if test="#{auction.isPublished() == false}">
+
+                                <h:commandButton value="Publish"></h:commandButton>
+
+                            </c:if>
+
+                        </c:if>
+
+                    </p>
+                </div>
             </div>
-            <p class="mb-1">${auction.product.description}</p>
 
-
-            <c:set value="#{auction.findHighestBid()}" var="highestBid"/>
-
-            <div class="d-flex w-100 justify-content-between">
-
-                <ui:fragment rendered="#{not empty highestBid}">
-                    <small>Highest bid: #{highestBid.amount}</small>
-                </ui:fragment>
-
-                <ui:fragment rendered="#{empty highestBid}">
-                    <small>Starting price: #{auction.startingPrice}</small>
-                </ui:fragment>
-
-                <small>Buyout price: <b>#{auction.buyoutPrice}</b></small>
-
-            </div>
+            <!--<div class="d-flex w-100 justify-content-between">-->
+            <!--</div>-->
 
         </a>
     </composite:implementation>

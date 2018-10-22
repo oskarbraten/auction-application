@@ -25,12 +25,16 @@ public class Auction {
 	
 	@OneToMany(mappedBy = "auction", cascade = CascadeType.PERSIST)
 	private List<Bid> bids;
+
+	@OneToOne
+	private Bid highestBid;
 	
 	@OneToOne
 	private Feedback feedback;
 
 	private Double startingPrice;
 	private Double buyoutPrice;
+
 	private Long startTime;
 	private Long length;
 
@@ -58,50 +62,30 @@ public class Auction {
 	}
 
 	/** Data services */
-	public boolean isPublished() {
-		long now =  new Date().getTime();
-
-		if (startTime == null) { //No start time has been set
-			return false;
-		}else if (startTime > now) { //If the start date is after (>) current date
-			return false;
-		} else { //The start date is in the past so it's published.
-			return true;
-		}
-	}
 
     public void publish() {
-	    this.startTime = new Date().getTime();
+        this.startTime = new Date().getTime();
     }
 
-	public boolean isFinished() {
-		Date now = new Date(); //Not thread safe! Unnecessary resource allocation?
+	public boolean isPublished() {
+		long now =  new Date().getTime();
+		return (startTime != null && startTime <= now); // no start time has been set, or start time is after (>) current time
+	}
 
-		if (startTime == null || startTime > now.getTime()) { //No started
-			return false;
-		//is started
-		}else if (startTime + length > now.getTime()) { // Not finished
-            return false;
-        //Is started not finished
-		} else { //The auction has started and run for it's intended time
-			return true;
-		}
+	public boolean isFinished() {
+        long now =  new Date().getTime();
+		return !(startTime == null || startTime > now || startTime + length > now); // not started, or not finished
 	}
 
 	public boolean isBoughtOut() {
-		Bid highest = findHighestBid();
-
-		if (highest != null && highest.getAmount() >= buyoutPrice){
-			return true;
-		}
-		return false;
+		return (highestBid != null && highestBid.getAmount() == buyoutPrice );
 	}
 
 	public boolean isComplete() {
 	    return (isFinished() || isBoughtOut());
     }
 
-    public Bid findHighestBid() {
+    public void updateHighestBid() {
 
         double highestBid = Double.MIN_VALUE;
         Bid bid = null;
@@ -113,9 +97,11 @@ public class Auction {
                 highestBid = bids.get(i).getAmount();
                 bid = bids.get(i);
             }
+
         }
 
-        return bid;
+        this.highestBid = bid;
+
     }
 	
 	public void setId(Integer id) {
@@ -184,4 +170,11 @@ public class Auction {
 		this.length = length;
 	}
 
+    public Bid getHighestBid() {
+        return highestBid;
+    }
+
+    public void setHighestBid(Bid highestBid) {
+        this.highestBid = highestBid;
+    }
 }

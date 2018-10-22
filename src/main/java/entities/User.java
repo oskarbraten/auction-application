@@ -45,7 +45,17 @@ public class User {
 		this.bids = new ArrayList<>();
 	}
 
+	public List<Auction> findAuctions() {
+	    ArrayList<Auction> auctions = new ArrayList<>();
+	    for (Product p : this.products) {
+	        auctions.addAll(p.getAuctions());
+        }
+
+        return auctions;
+    }
+
     /** Data services */
+
     public String getUsername() {
         return username;
     }

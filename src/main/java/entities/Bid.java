@@ -40,7 +40,9 @@ public class Bid {
 		this.amount = amount;
 
 		user.getBids().add(this);
+
         auction.getBids().add(this);
+        auction.updateHighestBid();
 	}
 
 	/** Data services */

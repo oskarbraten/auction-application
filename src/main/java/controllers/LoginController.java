@@ -40,7 +40,7 @@ public class LoginController implements Serializable {
     public String logout() {
         HttpSession session = Utils.getSession();
         session.invalidate();
-        return ApplicationConstants.LOGIN;
+        return ApplicationConstants.LOGIN + "?faces-redirect=true";
     }
 
     public void redirect() throws IOException {

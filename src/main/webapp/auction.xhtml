@@ -12,25 +12,24 @@
 
     <ui:include src="./resources/head.xhtml"/>
 
-    <c:set var="id" value="#{request.getParameter('id')}"/>
-
-    #{auctionController.setActiveAuction(id)}
-
-    <c:set var="auction" value="#{auctionController.auction}"/>
-
-    <title>Auction Application - #{auction.product.name}</title>
+    <title>Auction Application</title>
 
 </h:head>
 <h:body onload="#{loginController.redirect()}">
 
     <em:navbar loggedIn="#{loginController.getUsername() != null}"/>
 
+    <c:set var="id" value="#{request.getParameter('id')}"/>
+    <c:set var="auction" value="#{auctionController.getPublishedAuction(id)}"/>
+
     <div class="container">
 
         <div class="row">
+
             <div class="col-3">
                 <img src="${auction.product.picture}" class="rounded img-thumbnail" alt="${auction.product.name}"/>
             </div>
+
             <div class="col-5">
                 <h3>${auction.product.name}</h3>
                 <p>
@@ -42,55 +41,70 @@
                 </p>
 
                 <p>${auction.product.description}</p>
-
-
             </div>
+
             <div class="col-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Place a bid</h5>
-                        <p>
+                        <c:choose>
+                            <c:when test="#{not auction.isComplete()}">
+                                <h5 class="card-title">Place a bid</h5>
+                                <p>
 
-                            Starting price: #{auction.startingPrice}<br/>
-                            Buyout price: #{auction.buyoutPrice}<br/>
+                                    Starting price: #{auction.startingPrice}<br/>
+                                    Buyout price: #{auction.buyoutPrice}<br/>
 
-                            <c:set value="#{auction.findHighestBid()}" var="highestBid"/>
+                                    <c:choose>
+                                        <c:when test="#{not empty auction.highestBid}">
+                                            Highest bid: #{auction.highestBid.amount}
+                                        </c:when>
+                                        <c:otherwise>
+                                            No bids yet..
+                                        </c:otherwise>
+                                    </c:choose>
 
-                            <c:choose>
-                                <c:when test="#{not empty highestBid}">
-                                    Highest bid: #{highestBid.amount}
-                                </c:when>
-                                <c:otherwise>
-                                    No bids yet..
-                                </c:otherwise>
-                            </c:choose>
+                                </p>
+                                <h:form>
+                                    <div class="form-group">
+                                        <label for="amount">Amount</label>
 
-                        </p>
-                        <h:form>
+                                        <h:inputText styleClass="form-control" id="amount"
+                                                     value="#{amount}"></h:inputText>
 
-                            <div class="form-group">
-                                <label for="amount">Amount</label>
+                                        <c:if test="#{not empty request.getParameter('error')}">
+                                            <small class="text-muted">
+                                                <h:outputText value="${request.getParameter('error')}"></h:outputText>
+                                            </small>
+                                        </c:if>
 
-                                <h:inputText styleClass="form-control" id="amount"
-                                             value="#{auctionController.amount}"></h:inputText>
+                                    </div>
 
-                                <c:if test="#{not empty request.getParameter('error')}">
-                                    <small>
-                                        <h:outputText value="${request.getParameter('error')}"></h:outputText>
-                                    </small>
-                                </c:if>
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h:commandButton styleClass="btn btn-primary"
+                                                         actionListener="#{auctionController.placeBid(auction, loginController.getUsername(), amount)}"
+                                                         value="Place bid">
+                                            <f:param name="id" value="#{param.id}"/>
+                                        </h:commandButton>
 
-                            </div>
-
-                            <h:commandButton styleClass="btn btn-primary"
-                                             action="#{auctionController.placeBid(loginController.getUsername())}"
-                                             value="Place bid">
-                            </h:commandButton>
-
-                        </h:form>
+                                        <h:commandButton styleClass="btn btn-ligh"
+                                                         actionListener="#{auctionController.buyout(auction, loginController.getUsername())}"
+                                                         value="Buyout">
+                                            <f:param name="id" value="#{param.id}"/>
+                                        </h:commandButton>
+                                    </div>
+                                </h:form>
+                            </c:when>
+                            <c:otherwise>
+                                <h5 class="card-title">Sold!</h5>
+                                <p>
+                                    Price: #{auction.highestBid.amount}
+                                </p>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </h:body>

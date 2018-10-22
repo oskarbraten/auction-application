@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:em="http://java.sun.com/jsf/composite/components"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+
+    <ui:include src="./resources/head.xhtml"/>
+    <title>Auction Application - My Account</title>
+
+</h:head>
+<h:body onload="#{loginController.redirect()}">
+
+    <em:navbar loggedIn="#{loginController.getUsername() != null}" showLogout="true"/>
+
+    <c:set var="user" value="#{userManager.getUser(loginController.getUsername())}"/>
+
+    <div class="container">
+
+        <h3>Auctions</h3>
+
+        <div class="list-group">
+            <ui:repeat value="#{user.findAuctions()}" var="auction">
+                <em:auction auction="${auction}" showAsUser="true"></em:auction>
+            </ui:repeat>
+        </div>
+
+    </div>
+
+</h:body>
+
+</html>

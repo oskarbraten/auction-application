@@ -6,9 +6,11 @@ import entities.User;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Named;
 import javax.ws.rs.core.Response;
 
 @Stateless
+@Named(value = "userManager")
 public class UserManager {
     @EJB
     UserDAO userDAO;

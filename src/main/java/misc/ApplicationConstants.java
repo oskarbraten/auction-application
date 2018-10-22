@@ -1,8 +1,5 @@
 package misc;
 
-import javax.inject.Named;
-
-@Named(value = "applicationConstants")
 public class ApplicationConstants {
 
     public static final String USERNAME = "username";
