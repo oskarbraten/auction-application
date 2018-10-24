@@ -41,12 +41,9 @@
                             Starting price: #{auction.startingPrice}<br/>
                         </ui:fragment>
 
-                        <c:if test="#{cc.attrs.showAsUser}">
-                            Crap.
+                        <c:if test="${cc.attrs.showAsUser}">
 
-                            <c:if test="#{auction.isPublished()}">
-
-                                Crappy!
+                            <c:if test="#{auction.isPublished() == false}">
 
                                 <h:commandButton value="Publish"></h:commandButton>
 

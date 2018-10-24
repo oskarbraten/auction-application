@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Persistent class for the User database table. Class and system entity
+ * Persistent class for the Person database table. Class and system entity
  * defining the act of placing a bid on an item for sale.
  */
 
@@ -18,65 +18,66 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 public class Bid {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "auction_id")
-	private Auction auction;
-	
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne
+    private Auction auction;
 
-	private Double amount;
+    @ManyToOne
+    private Person person;
 
-	public Bid() {}
+    private Double amount;
 
-	public Bid(Auction auction, User user, Double amount) {
-		this.auction = auction;
-		this.user = user;
-		this.amount = amount;
+    public Bid() {
+    }
 
-		user.getBids().add(this);
+    public Bid(Auction auction, Person person, Double amount) {
+        this.auction = auction;
+        this.person = person;
+        this.amount = amount;
+
+        person.getBids().add(this);
 
         auction.getBids().add(this);
         auction.updateHighestBid();
-	}
+    }
 
-	/** Data services */
-	public Integer getId() {
-		return id;
-	}
+    /**
+     * Data services
+     */
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	@XmlTransient
-	public User getUser() {
-		return user;
-	}
+    @XmlTransient
+    public Person getPerson() {
+        return person;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
-	public Double getAmount() {
-		return amount;
-	}
+    public Double getAmount() {
+        return amount;
+    }
 
-	public void setAmount(Double amount) {
-		this.amount = amount;
-	}
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
 
-	@XmlTransient
-	public Auction getAuction() {
-		return auction;
-	}
+    @XmlTransient
+    public Auction getAuction() {
+        return auction;
+    }
 
-	public void setAuction(Auction auction) {
-		this.auction = auction;
-	}
+    public void setAuction(Auction auction) {
+        this.auction = auction;
+    }
 }

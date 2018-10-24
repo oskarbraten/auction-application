@@ -1,5 +1,7 @@
 package entities;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,35 +9,35 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Persistent class for the User database table. Class defining the main system
+ * Persistent class for the Person database table. Class defining the main system
  * user entity.
  */
 
-@Entity(name = "\"user\"")
-public class User {
+@Entity
+public class Person {
 
     @Id
     private String username;
-    private String password; // TODO: add proper security.
+    private String password;
 
 	@OneToOne(cascade = CascadeType.PERSIST)
 	private Address address;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
 	private List<Product> products;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
 	private List<Bid> bids;
 
 	private String email;
 	private String name;
 	private String phone;
 
-	public User() {}
+	public Person() {}
 
-	public User(String username, String password, String email, String name, String phone, Address address) {
+	public Person(String username, String password, String email, String name, String phone, Address address) {
 	    this.username = username;
-	    this.password = password;
+	    this.password = DigestUtils.sha256Hex(password);
 		this.email = email;
 		this.name = name;
 		this.phone = phone;
@@ -69,7 +71,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = DigestUtils.sha256Hex(password);
     }
 
 	public String getEmail() {

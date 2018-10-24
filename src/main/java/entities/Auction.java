@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Persistent class for the User database table. Class and system entity
+ * Persistent class for the Person database table. Class and system entity
  * defining the act of selling a product.
  */
 
@@ -16,73 +16,76 @@ import java.util.List;
 @XmlRootElement
 public class Auction {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@ManyToOne
-	private Product product;
-	
-	@OneToMany(mappedBy = "auction", cascade = CascadeType.PERSIST)
-	private List<Bid> bids;
+    @ManyToOne
+    private Product product;
 
-	@OneToOne
-	private Bid highestBid;
-	
-	@OneToOne
-	private Feedback feedback;
+    @OneToMany(mappedBy = "auction", cascade = CascadeType.PERSIST)
+    private List<Bid> bids;
 
-	private Double startingPrice;
-	private Double buyoutPrice;
+    @OneToOne
+    private Bid highestBid;
 
-	private Long startTime;
-	private Long length;
+    @OneToOne
+    private Feedback feedback;
 
-	public Auction() {}
+    private Double startingPrice;
+    private Double buyoutPrice;
 
-	public Auction(Product product, double startingPrice, double buyoutPrice, long length) {
-		this.product = product;
-		this.startingPrice = startingPrice;
-		this.buyoutPrice = buyoutPrice;
-		this.length = length;
-		this.bids = new ArrayList<>();
+    private Long startTime;
+    private Long length;
 
-        product.getAuctions().add(this);
-	}
+    public Auction() {
+    }
 
-	public Auction(Product product, double startingPrice, double buyoutPrice, long startTime, long length) {
-		this.product = product;
-		this.startingPrice = startingPrice;
-		this.buyoutPrice = buyoutPrice;
-		this.startTime = startTime;
-		this.length = length;
-		this.bids = new ArrayList<>();
+    public Auction(Product product, double startingPrice, double buyoutPrice, long length) {
+        this.product = product;
+        this.startingPrice = startingPrice;
+        this.buyoutPrice = buyoutPrice;
+        this.length = length;
+        this.bids = new ArrayList<>();
 
         product.getAuctions().add(this);
-	}
+    }
 
-	/** Data services */
+    public Auction(Product product, double startingPrice, double buyoutPrice, long startTime, long length) {
+        this.product = product;
+        this.startingPrice = startingPrice;
+        this.buyoutPrice = buyoutPrice;
+        this.startTime = startTime;
+        this.length = length;
+        this.bids = new ArrayList<>();
+
+        product.getAuctions().add(this);
+    }
+
+    /**
+     * Data services
+     */
 
     public void publish() {
         this.startTime = new Date().getTime();
     }
 
-	public boolean isPublished() {
-		long now =  new Date().getTime();
-		return (startTime != null && startTime <= now); // no start time has been set, or start time is after (>) current time
-	}
+    public boolean isPublished() {
+        long now = new Date().getTime();
+        return (startTime != null && startTime <= now); // no start time has been set, or start time is after (>) current time
+    }
 
-	public boolean isFinished() {
-        long now =  new Date().getTime();
-		return !(startTime == null || startTime > now || startTime + length > now); // not started, or not finished
-	}
+    public boolean isFinished() {
+        long now = new Date().getTime();
+        return !(startTime == null || startTime > now || startTime + length > now); // not started, or not finished
+    }
 
-	public boolean isBoughtOut() {
-		return (highestBid != null && highestBid.getAmount() == buyoutPrice );
-	}
+    public boolean isBoughtOut() {
+        return (highestBid != null && highestBid.getAmount() == buyoutPrice);
+    }
 
-	public boolean isComplete() {
-	    return (isFinished() || isBoughtOut());
+    public boolean isComplete() {
+        return (isFinished() || isBoughtOut());
     }
 
     public void updateHighestBid() {
@@ -103,72 +106,72 @@ public class Auction {
         this.highestBid = bid;
 
     }
-	
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
-	public Integer getId() {
-		return id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Product getProduct() {
-		return product;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setProduct(Product product) {
-		this.product = product;
-	}
+    public Product getProduct() {
+        return product;
+    }
 
-	@XmlTransient
-	public List<Bid> getBids() {
-		return bids;
-	}
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 
-	public void setBids(List<Bid> bids) {
-		this.bids = bids;
-	}
+    @XmlTransient
+    public List<Bid> getBids() {
+        return bids;
+    }
 
-	@XmlTransient
-	public Feedback getFeedback() {
-		return feedback;
-	}
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
 
-	public void setFeedback(Feedback feedback) {
-		this.feedback = feedback;
-	}
+    @XmlTransient
+    public Feedback getFeedback() {
+        return feedback;
+    }
 
-	public Double getStartingPrice() {
-		return startingPrice;
-	}
+    public void setFeedback(Feedback feedback) {
+        this.feedback = feedback;
+    }
 
-	public void setStartingPrice(Double startingPrice) {
-		this.startingPrice = startingPrice;
-	}
+    public Double getStartingPrice() {
+        return startingPrice;
+    }
 
-	public Double getBuyoutPrice() {
-		return buyoutPrice;
-	}
+    public void setStartingPrice(Double startingPrice) {
+        this.startingPrice = startingPrice;
+    }
 
-	public void setBuyoutPrice(Double buyoutPrice) {
-		this.buyoutPrice = buyoutPrice;
-	}
+    public Double getBuyoutPrice() {
+        return buyoutPrice;
+    }
 
-	public Long getStartTime() {
-		return startTime;
-	}
+    public void setBuyoutPrice(Double buyoutPrice) {
+        this.buyoutPrice = buyoutPrice;
+    }
 
-	public void setStartTime(Long startTime) {
-		this.startTime = startTime;
-	}
+    public Long getStartTime() {
+        return startTime;
+    }
 
-	public Long getLength() {
-		return length;
-	}
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
 
-	public void setLength(Long length) {
-		this.length = length;
-	}
+    public Long getLength() {
+        return length;
+    }
+
+    public void setLength(Long length) {
+        this.length = length;
+    }
 
     public Bid getHighestBid() {
         return highestBid;

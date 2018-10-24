@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:em="http://java.sun.com/jsf/composite/components"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
@@ -13,20 +14,47 @@
     <title>Auction Application - My Account</title>
 
 </h:head>
-<h:body onload="#{loginController.redirect()}">
+<h:body>
 
-    <em:navbar loggedIn="#{loginController.getUsername() != null}" showLogout="true"/>
+    <c:set var="user" value="#{loginController.getUser()}"/>
+    <!-- getUser will redirect us if we're not logged in. -->
 
-    <c:set var="user" value="#{userManager.getUser(loginController.getUsername())}"/>
+    <em:navbar loggedIn="#{user != null}" showLogout="true"/>
 
     <div class="container">
 
-        <h3>Auctions</h3>
+        <h3>My auctions</h3>
 
         <div class="list-group">
             <ui:repeat value="#{user.findAuctions()}" var="auction">
                 <em:auction auction="${auction}" showAsUser="true"></em:auction>
             </ui:repeat>
+        </div>
+
+        <br/>
+        <h3>Bids</h3>
+
+        <div class="list-group">
+            <ui:repeat value="#{user.findAuctions()}" var="auction">
+                <em:auction auction="${auction}" showAsUser="true"></em:auction>
+            </ui:repeat>
+        </div>
+
+        <br/>
+        <h3>Purchases</h3>
+
+        <div class="list-group">
+            <ui:repeat value="#{user.findAuctions()}" var="auction">
+                <em:auction auction="${auction}" showAsUser="true"></em:auction>
+            </ui:repeat>
+        </div>
+
+        <div class="row justify-content-end mt-4">
+            <div class="col-auto">
+                <h:form>
+                    <h:commandLink styleClass="btn btn-light" value="Logout" action="#{loginController.logout()}"></h:commandLink>
+                </h:form>
+            </div>
         </div>
 
     </div>

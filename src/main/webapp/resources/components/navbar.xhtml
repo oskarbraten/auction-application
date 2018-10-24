@@ -23,16 +23,14 @@
                 <div class="d-flex justify-content-end">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <h:form>
-                                <c:choose>
-                                    <c:when test="${cc.attrs.showLogout}">
-                                        <h:commandLink styleClass="nav-link" value="Logout" action="#{loginController.logout()}"></h:commandLink>
-                                    </c:when>
-                                    <c:when test="${cc.attrs.loggedIn}">
-                                        <a class="nav-link" href="${'account.xhtml'}">My account</a>
-                                    </c:when>
-                                </c:choose>
-                            </h:form>
+                            <c:choose>
+                                <c:when test="${cc.attrs.showLogout}">
+                                    <a class="nav-link" href="#{'index.xhtml'}">Back</a>
+                                </c:when>
+                                <c:when test="${cc.attrs.loggedIn}">
+                                    <a class="nav-link" href="${'account.xhtml'}">My account</a>
+                                </c:when>
+                            </c:choose>
                         </li>
                     </ul>
                 </div>

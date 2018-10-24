@@ -22,8 +22,7 @@ public class Product {
 	private Integer id;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "user_id")
-	private User user;
+	private Person person;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
 	private List<Auction> auctions;
@@ -35,13 +34,13 @@ public class Product {
 
 	public Product() {}
 
-	public Product(String name, String description, String features, String picture, User user) {
+	public Product(String name, String description, String features, String picture, Person person) {
 		this.name = name;
 		this.description = description;
 		this.features = features;
 		this.picture = picture;
-		this.user = user;
-		user.getProducts().add(this);
+		this.person = person;
+		person.getProducts().add(this);
 
 		this.auctions = new ArrayList<>();
 	}
@@ -132,12 +131,12 @@ public class Product {
 	}
 	
 	@XmlTransient
-	public User getUser() {
-		return user;
+	public Person getPerson() {
+		return person;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 
 	@XmlTransient

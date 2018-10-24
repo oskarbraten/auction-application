@@ -6,8 +6,8 @@ import ejb.dao.UserDAO;
 import ejb.exceptions.AuctionApplicationException;
 import entities.Auction;
 import entities.Bid;
+import entities.Person;
 import entities.Product;
-import entities.User;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -94,13 +94,13 @@ public class AuctionManager {
             throw new AuctionApplicationException("Amount must be less than buyout price.", Response.Status.BAD_REQUEST);
         }
 
-        User user = userDAO.find(username);
+        Person person = userDAO.find(username);
 
-        if (user == null) {
-            throw new AuctionApplicationException("User with specified 'userId' was not found.", Response.Status.NOT_FOUND);
+        if (person == null) {
+            throw new AuctionApplicationException("Person with specified 'userId' was not found.", Response.Status.NOT_FOUND);
         }
 
-        Bid bid = new Bid(auction, user, amount);
+        Bid bid = new Bid(auction, person, amount);
 
         return bid;
 
@@ -114,13 +114,13 @@ public class AuctionManager {
             throw new AuctionApplicationException("A published Auction with 'auctionId' was not found.", Response.Status.NOT_FOUND);
         }
 
-        User user = userDAO.find(username);
+        Person person = userDAO.find(username);
 
-        if (user == null) {
-            throw new AuctionApplicationException("User with specified 'userId' was not found.", Response.Status.NOT_FOUND);
+        if (person == null) {
+            throw new AuctionApplicationException("Person with specified 'userId' was not found.", Response.Status.NOT_FOUND);
         }
 
-        Bid bid = new Bid(auction, user, auction.getBuyoutPrice());
+        Bid bid = new Bid(auction, person, auction.getBuyoutPrice());
         return bid;
 
     }

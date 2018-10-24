@@ -4,86 +4,88 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * Persistent class for the User database table. Class and system entity
+ * Persistent class for the Person database table. Class and system entity
  * defining the act of making a review on a sold item.
  */
 
 @Entity(name = "feedback")
 public class Feedback {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@OneToOne(mappedBy = "feedback")
-	private Auction auction;
-	
-	@OneToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-	
-	private String text;
-	private Integer sellerRating;
-	private Integer productRating;
+    @OneToOne(mappedBy = "feedback")
+    private Auction auction;
 
-	public Feedback() {}
+    @OneToOne
+    private Person person;
 
-	public Feedback(Auction auction, User user, String text, int sellerRating, int productRating) {
-		this.auction = auction;
-		this.user = user;
-		this.text = text;
-		this.sellerRating = sellerRating;
-		this.productRating = productRating;
-	}
+    private String text;
+    private Integer sellerRating;
+    private Integer productRating;
 
-	/** Data services */
-	public Integer getId() {
-		return id;
-	}
+    public Feedback() {
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Feedback(Auction auction, Person person, String text, int sellerRating, int productRating) {
+        this.auction = auction;
+        this.person = person;
+        this.text = text;
+        this.sellerRating = sellerRating;
+        this.productRating = productRating;
+    }
 
-	@XmlTransient
-	public Auction getAuction() {
-		return auction;
-	}
+    /**
+     * Data services
+     */
+    public Integer getId() {
+        return id;
+    }
 
-	public void setAuction(Auction auction) {
-		this.auction = auction;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	@XmlTransient
-	public User getUser() {
-		return user;
-	}
+    @XmlTransient
+    public Auction getAuction() {
+        return auction;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setAuction(Auction auction) {
+        this.auction = auction;
+    }
 
-	public String getText() {
-		return text;
-	}
+    @XmlTransient
+    public Person getPerson() {
+        return person;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
-	public Integer getSellerRating() {
-		return sellerRating;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public void setSellerRating(Integer sellerRating) {
-		this.sellerRating = sellerRating;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	public Integer getProductRating() {
-		return productRating;
-	}
+    public Integer getSellerRating() {
+        return sellerRating;
+    }
 
-	public void setProductRating(Integer productRating) {
-		this.productRating = productRating;
-	}
+    public void setSellerRating(Integer sellerRating) {
+        this.sellerRating = sellerRating;
+    }
+
+    public Integer getProductRating() {
+        return productRating;
+    }
+
+    public void setProductRating(Integer productRating) {
+        this.productRating = productRating;
+    }
 }

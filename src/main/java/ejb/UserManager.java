@@ -2,7 +2,7 @@ package ejb;
 
 import ejb.dao.UserDAO;
 import ejb.exceptions.AuctionApplicationException;
-import entities.User;
+import entities.Person;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -15,13 +15,13 @@ public class UserManager {
     @EJB
     UserDAO userDAO;
 
-    public User getUser(String username) {
-        User user = userDAO.find(username);
+    public Person getUser(String username) {
+        Person person = userDAO.find(username);
 
-        if (user == null) {
-            throw new AuctionApplicationException("User was not found.", Response.Status.NOT_FOUND);
+        if (person == null) {
+            throw new AuctionApplicationException("Person was not found.", Response.Status.NOT_FOUND);
         }
 
-        return user;
+        return person;
     }
 }
