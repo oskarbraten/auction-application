@@ -44,6 +44,11 @@ public class Bid {
         auction.updateHighestBid();
     }
 
+    public boolean isPurchase() {
+        boolean isPurchased = this.auction.isComplete() && (this.auction.getHighestBid() == this);
+        return isPurchased;
+    }
+
     /**
      * Data services
      */

@@ -10,12 +10,12 @@
 
 <f:view>
     <composite:interface>
-        <composite:attribute name="auction" required="true"/>
-        <composite:attribute name="showAsUser" required="false"/>
+        <composite:attribute name="bid" required="true"/>
     </composite:interface>
     <composite:implementation>
 
-        <c:set var="auction" value="#{cc.attrs.auction}"/>
+        <c:set var="bid" value="#{cc.attrs.bid}"/>
+        <c:set var="auction" value="#{bid.auction}"/>
 
         <a href="./auction.xhtml?id=${auction.id}"
            class="list-group-item list-group-item-action flex-column align-items-start">
@@ -40,17 +40,6 @@
                         <ui:fragment rendered="#{empty auction.highestBid}">
                             Starting price: #{auction.startingPrice}<br/>
                         </ui:fragment>
-
-                        <c:if test="${cc.attrs.showAsUser}">
-
-                            <c:if test="#{auction.isPublished() == false}">
-
-                                <h:commandButton value="Publish"></h:commandButton>
-
-                            </c:if>
-
-                        </c:if>
-
                     </p>
                 </div>
             </div>

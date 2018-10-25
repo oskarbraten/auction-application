@@ -1,7 +1,6 @@
 package controllers;
 
 import ejb.UserManager;
-import entities.Party;
 import entities.Person;
 import misc.ApplicationConstants;
 import misc.Utils;
@@ -14,7 +13,6 @@ import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
 
@@ -45,8 +43,7 @@ public class LoginController implements Serializable {
         Person person = userManager.getUser(principal.getName());
 
         HttpSession session = Utils.getSession();
-        session.setAttribute(ApplicationConstants.USER, person);
-
+        session.setAttribute(ApplicationConstants.USERNAME, person.getUsername());
 
         if (request.isUserInRole(ApplicationConstants.ADMIN_PARTY)) { // For future use:
             return ApplicationConstants.INDEX_REDIRECT;
@@ -70,23 +67,21 @@ public class LoginController implements Serializable {
 
         // Successfully logged out, redirect to login page.
         return ApplicationConstants.LOGIN_REDIRECT;
+
     }
 
-    public Person getUser() throws IOException {
+    public Person getUser() {
 
-        Person user = (Person) Utils.getSession().getAttribute(ApplicationConstants.USER);
+        String username = (String) Utils.getSession().getAttribute(ApplicationConstants.USERNAME);
+        Person user = userManager.getUser(username);
 
         if (Utils.getRequest().isUserInRole(ApplicationConstants.USER_PARTY) && user != null) {
             return user;
         } else {
-            Utils.getResponse().sendRedirect(ApplicationConstants.LOGIN + ".xhtml");
+            //Utils.getResponse().sendRedirect(ApplicationConstants.LOGIN + ".xhtml");
             return null;
         }
-    }
 
-//    public Person getUser() {
-//        HttpSession session = Utils.getSession();
-//        return (Person) session.getAttribute(ApplicationConstants.USER);
-//    }
+    }
 
 }

@@ -9,7 +9,7 @@
 <f:view>
     <composite:interface>
         <composite:attribute name="loggedIn" required="true"/>
-        <composite:attribute name="showLogout" required="false"/>
+        <composite:attribute name="showBackButton" required="false"/>
     </composite:interface>
     <composite:implementation>
 
@@ -24,7 +24,7 @@
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
                             <c:choose>
-                                <c:when test="${cc.attrs.showLogout}">
+                                <c:when test="${cc.attrs.showBackButton}">
                                     <a class="nav-link" href="#{'index.xhtml'}">Back</a>
                                 </c:when>
                                 <c:when test="${cc.attrs.loggedIn}">

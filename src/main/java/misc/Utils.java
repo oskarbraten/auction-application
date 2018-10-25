@@ -23,7 +23,7 @@ public class Utils {
     }
 
     public static FacesContext getContext() {
-        return (FacesContext) FacesContext.getCurrentInstance();
+        return FacesContext.getCurrentInstance();
     }
 
 }
