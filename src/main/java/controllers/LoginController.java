@@ -1,16 +1,20 @@
 package controllers;
 
 import ejb.UserManager;
-import entities.User;
+import entities.Person;
 import misc.ApplicationConstants;
 import misc.Utils;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.io.Serializable;
+import java.security.Principal;
 
 
 @Named(value = "loginController")
@@ -22,40 +26,62 @@ public class LoginController implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String login(String username, String password) throws IOException {
+    public String login(String username, String password) {
 
-        User user = userManager.getUser(username);
+        FacesContext context = Utils.getContext();
+        HttpServletRequest request = Utils.getRequest();
 
-        if (user.getPassword().equals(password)) {
-            HttpSession session = Utils.getSession();
-            session.setAttribute(ApplicationConstants.USERNAME, username);
-
-            return ApplicationConstants.INDEX + "?faces-redirect=true";
-        } else {
-            return ApplicationConstants.LOGIN;
+        try {
+            request.login(username, password);
+        } catch (ServletException e) {
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed!", null));
+            return ApplicationConstants.LOGIN_REDIRECT;
         }
+
+        Principal principal = request.getUserPrincipal();
+
+        Person person = userManager.getUser(principal.getName());
+
+        HttpSession session = Utils.getSession();
+        session.setAttribute(ApplicationConstants.USERNAME, person.getUsername());
+
+        if (request.isUserInRole(ApplicationConstants.ADMIN_PARTY)) { // For future use:
+            return ApplicationConstants.INDEX_REDIRECT;
+        }
+
+        return ApplicationConstants.INDEX_REDIRECT;
 
     }
 
     public String logout() {
+
         HttpSession session = Utils.getSession();
         session.invalidate();
-        return ApplicationConstants.LOGIN + "?faces-redirect=true";
-    }
 
-    public void redirect() throws IOException {
-
-        HttpSession session = Utils.getSession();
-
-        if (session.getAttribute(ApplicationConstants.USERNAME) == null) {
-            Utils.getResponse().sendRedirect(ApplicationConstants.LOGIN + ".xhtml");
+        try {
+            Utils.getRequest().logout();
+        } catch (ServletException e) {
+            Utils.getContext().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed!", null));
+            return ApplicationConstants.LOGIN_REDIRECT;
         }
 
+        // Successfully logged out, redirect to login page.
+        return ApplicationConstants.LOGIN_REDIRECT;
+
     }
 
-    public String getUsername() {
-        HttpSession session = Utils.getSession();
-        return (String) session.getAttribute(ApplicationConstants.USERNAME);
+    public Person getUser() {
+
+        String username = (String) Utils.getSession().getAttribute(ApplicationConstants.USERNAME);
+        Person user = userManager.getUser(username);
+
+        if (Utils.getRequest().isUserInRole(ApplicationConstants.USER_PARTY) && user != null) {
+            return user;
+        } else {
+            //Utils.getResponse().sendRedirect(ApplicationConstants.LOGIN + ".xhtml");
+            return null;
+        }
+
     }
 
 }

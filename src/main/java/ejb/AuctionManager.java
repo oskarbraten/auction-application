@@ -6,17 +6,24 @@ import ejb.dao.UserDAO;
 import ejb.exceptions.AuctionApplicationException;
 import entities.Auction;
 import entities.Bid;
+import entities.Person;
 import entities.Product;
-import entities.User;
 
+import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.jms.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Stateless
 @Named(value = "auctionManager")
+@RolesAllowed("users")
 public class AuctionManager {
 
     @EJB
@@ -28,12 +35,41 @@ public class AuctionManager {
     @EJB
     UserDAO userDAO;
 
+    @Inject
+    @JMSConnectionFactory("jms/dat250/ConnectionFactory")
+    @JMSSessionMode(JMSContext.AUTO_ACKNOWLEDGE)
+    private JMSContext context;
+
+    @Resource(lookup = "jms/dat250/Topic")
+    private Topic topic;
+
+    @Schedule(second = "*/1", minute = "*", hour = "*", persistent = false)
+    public void checkForPurchases() throws Exception {
+        List<Auction> auctions = getAllAuctions();
+        if (auctions != null && !auctions.isEmpty()) {
+            for (Auction auction : auctions) {
+
+                if (auction.isComplete() && auction.getHighestBid() != null) {
+
+                    Message message = context.createMessage();
+
+                    message.setStringProperty("productName", auction.getProduct().getName());
+                    message.setStringProperty("username", auction.getHighestBid().getPerson().getUsername());
+
+                    context.createProducer().setProperty("topicUser", "dweet").send(topic, message);
+                }
+
+            }
+        }
+    }
+
     public List<Auction> getAllAuctions() {
 
         return auctionDAO.findAllAuctions();
 
     }
 
+    @PermitAll
     public List<Auction> getActiveAuctions() {
 
         return auctionDAO.findActiveAuctions();
@@ -94,13 +130,13 @@ public class AuctionManager {
             throw new AuctionApplicationException("Amount must be less than buyout price.", Response.Status.BAD_REQUEST);
         }
 
-        User user = userDAO.find(username);
+        Person person = userDAO.find(username);
 
-        if (user == null) {
-            throw new AuctionApplicationException("User with specified 'userId' was not found.", Response.Status.NOT_FOUND);
+        if (person == null) {
+            throw new AuctionApplicationException("Person with specified 'userId' was not found.", Response.Status.NOT_FOUND);
         }
 
-        Bid bid = new Bid(auction, user, amount);
+        Bid bid = new Bid(auction, person, amount);
 
         return bid;
 
@@ -114,13 +150,13 @@ public class AuctionManager {
             throw new AuctionApplicationException("A published Auction with 'auctionId' was not found.", Response.Status.NOT_FOUND);
         }
 
-        User user = userDAO.find(username);
+        Person person = userDAO.find(username);
 
-        if (user == null) {
-            throw new AuctionApplicationException("User with specified 'userId' was not found.", Response.Status.NOT_FOUND);
+        if (person == null) {
+            throw new AuctionApplicationException("Person with specified 'userId' was not found.", Response.Status.NOT_FOUND);
         }
 
-        Bid bid = new Bid(auction, user, auction.getBuyoutPrice());
+        Bid bid = new Bid(auction, person, auction.getBuyoutPrice());
         return bid;
 
     }

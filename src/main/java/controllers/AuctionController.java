@@ -3,12 +3,13 @@ package controllers;
 import ejb.AuctionManager;
 import ejb.exceptions.AuctionApplicationException;
 import entities.Auction;
-import entities.Bid;
+import entities.Person;
 import misc.ApplicationConstants;
 import misc.Utils;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class AuctionController implements Serializable {
         }
     }
 
-    public void placeBid(Auction auction, String username, String amountString) {
+    public String placeBid(Auction auction, Person user, String amountString) {
 
         int id = auction.getId();
 
@@ -51,43 +52,34 @@ public class AuctionController implements Serializable {
                 throw new AuctionApplicationException("Amount must be a valid double.", Response.Status.BAD_REQUEST);
             }
 
-            Bid bid = auctionManager.placeBid(id, username, amount);
-            Utils.getResponse().sendRedirect(ApplicationConstants.AUCTION + ".xhtml?id=" + id);
+            auctionManager.placeBid(id, user.getUsername(), amount);
+
+            return ApplicationConstants.AUCTION_REDIRECT + "&id=" + id;
 
         } catch (AuctionApplicationException exception) {
 
-            try {
-                Utils.getResponse().sendRedirect(ApplicationConstants.AUCTION + ".xhtml?id=" + id + "&error=" + exception.getMessage());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Utils.getContext().addMessage("placeBidForm:amount", new FacesMessage(FacesMessage.SEVERITY_ERROR, exception.getMessage(), null));
+            return null;
 
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
     }
 
-    public void buyout(Auction auction, String username) {
+    public String buyout(Auction auction, Person user) {
 
         int id = auction.getId();
 
         try {
 
-            auctionManager.buyout(id, username);
+            auctionManager.buyout(id, user.getUsername());
 
-            Utils.getResponse().sendRedirect(ApplicationConstants.AUCTION + ".xhtml?id=" + id);
+            return ApplicationConstants.AUCTION_REDIRECT + "&id=" + id;
 
         } catch (AuctionApplicationException exception) {
 
-            try {
-                Utils.getResponse().sendRedirect(ApplicationConstants.AUCTION + ".xhtml?id=" + id + "&error=" + exception.getMessage());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Utils.getContext().addMessage("placeBidForm:amount", new FacesMessage(FacesMessage.SEVERITY_ERROR, exception.getMessage(), null));
+            return null;
 
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
     }

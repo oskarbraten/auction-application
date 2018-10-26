@@ -31,6 +31,11 @@
 			<version>10.12.1.1</version>
 			<scope>test</scope>
 		</dependency> -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.9</version>
+		</dependency>
 		<!-- Contains all Java EE 7 APIs (from EJB, JTA, JCA over CDI to JPA) -->
 		<dependency>
 			<groupId>javax</groupId>

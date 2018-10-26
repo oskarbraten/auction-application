@@ -9,7 +9,7 @@
 <f:view>
     <composite:interface>
         <composite:attribute name="loggedIn" required="true"/>
-        <composite:attribute name="showLogout" required="false"/>
+        <composite:attribute name="showBackButton" required="false"/>
     </composite:interface>
     <composite:implementation>
 
@@ -17,25 +17,26 @@
 
             <div class="container">
 
-                <a href="${'index.xhtml'}" class="navbar-brand">
+                <a href="${'index.xhtml'}" class="navbar-brand mr-auto">
                     The Auction House
                 </a>
-                <div class="d-flex justify-content-end">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <h:form>
-                                <c:choose>
-                                    <c:when test="${cc.attrs.showLogout}">
-                                        <h:commandLink styleClass="nav-link" value="Logout" action="#{loginController.logout()}"></h:commandLink>
-                                    </c:when>
-                                    <c:when test="${cc.attrs.loggedIn}">
-                                        <a class="nav-link" href="${'account.xhtml'}">My account</a>
-                                    </c:when>
-                                </c:choose>
-                            </h:form>
-                        </li>
-                    </ul>
-                </div>
+
+                <span class="navbar-text mr-2">
+                    Logged in as #{loginController.getUser().username}
+                </span>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <c:choose>
+                            <c:when test="${cc.attrs.showBackButton}">
+                                <a class="nav-link" href="#{'index.xhtml'}">Back</a>
+                            </c:when>
+                            <c:when test="${cc.attrs.loggedIn}">
+                                <a class="nav-link" href="${'account.xhtml'}">My account</a>
+                            </c:when>
+                        </c:choose>
+                    </li>
+                </ul>
 
             </div>
 

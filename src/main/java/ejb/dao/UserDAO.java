@@ -1,8 +1,7 @@
 package ejb.dao;
 
 import ejb.exceptions.AuctionApplicationException;
-import entities.Product;
-import entities.User;
+import entities.Person;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -22,7 +21,7 @@ public class UserDAO {
     @PersistenceContext(unitName = "AuctionApplicationPU")
     private EntityManager em;
 
-    public List<User> findAllUsers() {
+    public List<Person> findAllUsers() {
 
         Query query = em.createQuery("SELECT u FROM user u");
 
@@ -34,17 +33,17 @@ public class UserDAO {
 
     }
 
-    public User find(String username) {
+    public Person find(String username) {
 
         try {
-            return em.find(User.class, username);
+            return em.find(Person.class, username);
         } catch (IllegalArgumentException e) {
-            throw new AuctionApplicationException("Invalid PK for User supplied.", Response.Status.BAD_REQUEST);
+            throw new AuctionApplicationException("Invalid PK for Person supplied.", Response.Status.BAD_REQUEST);
         }
 
     }
 
-    public boolean persist(User u) {
+    public boolean persist(Person u) {
 
         try {
             em.persist(u);

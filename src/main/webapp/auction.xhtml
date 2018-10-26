@@ -2,7 +2,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns:h="http://xmlns.jcp.org/jsf/html"
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:em="http://java.sun.com/jsf/composite/components"
@@ -15,9 +16,12 @@
     <title>Auction Application</title>
 
 </h:head>
-<h:body onload="#{loginController.redirect()}">
+<h:body>
 
-    <em:navbar loggedIn="#{loginController.getUsername() != null}"/>
+    <c:set var="user" value="#{loginController.getUser()}"/>
+    <!-- getUser will redirect us if we're not logged in. -->
+
+    <em:navbar loggedIn="#{user != null}"/>
 
     <c:set var="id" value="#{request.getParameter('id')}"/>
     <c:set var="auction" value="#{auctionController.getPublishedAuction(id)}"/>
@@ -64,30 +68,26 @@
                                     </c:choose>
 
                                 </p>
-                                <h:form>
+                                <h:form id="placeBidForm">
                                     <div class="form-group">
                                         <label for="amount">Amount</label>
 
                                         <h:inputText styleClass="form-control" id="amount"
                                                      value="#{amount}"></h:inputText>
 
-                                        <c:if test="#{not empty request.getParameter('error')}">
-                                            <small class="text-muted">
-                                                <h:outputText value="${request.getParameter('error')}"></h:outputText>
-                                            </small>
-                                        </c:if>
+                                        <h:message class="error" for="amount" id="amountError" />
 
                                     </div>
 
                                     <div class="d-flex w-100 justify-content-between">
                                         <h:commandButton styleClass="btn btn-primary"
-                                                         actionListener="#{auctionController.placeBid(auction, loginController.getUsername(), amount)}"
+                                                         action="#{auctionController.placeBid(auction, user, amount)}"
                                                          value="Place bid">
                                             <f:param name="id" value="#{param.id}"/>
                                         </h:commandButton>
 
                                         <h:commandButton styleClass="btn btn-ligh"
-                                                         actionListener="#{auctionController.buyout(auction, loginController.getUsername())}"
+                                                         action="#{auctionController.buyout(auction, user)}"
                                                          value="Buyout">
                                             <f:param name="id" value="#{param.id}"/>
                                         </h:commandButton>
