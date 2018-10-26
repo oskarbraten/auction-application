@@ -1,14 +1,10 @@
 package controllers;
 
-import entities.Bid;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import java.io.Serializable;
 
 @Named(value = "accountController")
 @RequestScoped
-public class AccountController {
-    public boolean isPurchase(Bid bid) {
-        return bid.isPurchase();
-    }
+public class AccountController implements Serializable {
 }

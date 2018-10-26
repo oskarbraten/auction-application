@@ -45,8 +45,7 @@ public class Bid {
     }
 
     public boolean isPurchase() {
-        boolean isPurchased = this.auction.isComplete() && (this.auction.getHighestBid() == this);
-        return isPurchased;
+        return this.auction.isComplete() && (this.auction.getHighestBid() == this);
     }
 
     /**

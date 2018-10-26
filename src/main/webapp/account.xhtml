@@ -32,11 +32,20 @@
         </div>
 
         <br/>
-        <h3>Bids</h3>
+        <h3>Active</h3>
 
         <div class="list-group">
-            <ui:repeat value="#{user.bids}" var="bid">
-                <em:bid bid="#{bid}" rendered="#{accountController.isPurchase(bid) == false}"></em:bid>
+            <ui:repeat value="#{user.findActiveBids()}" var="bid">
+                <em:bid bid="#{bid}"></em:bid>
+            </ui:repeat>
+        </div>
+
+        <br/>
+        <h3>Outbid</h3>
+
+        <div class="list-group">
+            <ui:repeat value="#{user.findOutbidBids()}" var="bid">
+                <em:bid bid="#{bid}"></em:bid>
             </ui:repeat>
         </div>
 
@@ -44,8 +53,8 @@
         <h3>Purchases</h3>
 
         <div class="list-group">
-            <ui:repeat value="#{user.bids}" var="bid">
-                <em:bid bid="#{bid}" rendered="#{accountController.isPurchase(bid)}"></em:bid>
+            <ui:repeat value="#{user.findPurchases()}" var="bid">
+                <em:bid bid="#{bid}"></em:bid>
             </ui:repeat>
         </div>
 

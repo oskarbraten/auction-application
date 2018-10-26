@@ -42,8 +42,8 @@ public class Initialize {
 		Product bitcoinPick = new Product("Bitcoin Mining Pick", "Pickaxe for bitcoin mining. Get you pick and start mining TODAY!",
 				"Ergonomic design, Efficient form, ECO Friendly", "https://image.shutterstock.com/image-vector/bitcoin-cryptocurrency-mining-pickaxe-minimal-450w-675558532.jpg",
                 person2);
-		Product velocipede = new Product("Velocipede", "Experience the JOY of historic cycling. Guaranteed to give you an unforgettable experience, Health insurance not included.",
-				"Has wheels, Purple finish", "https://cdn3.vectorstock.com/i/1000x1000/88/62/velocipede-vector-948862.jpg", person1);
+		Product velocipede = new Product("Velocipede", "Experience the JOY of historic cycling. Guaranteed to give you an unforgettable experience. Health insurance not included..",
+				"Has wheels, Purple finish", "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/The_American_Velocipede.jpg/225px-The_American_Velocipede.jpg", person1);
 
 		/** Auctions */
 		Auction auction1 = new Auction(bitcoinPick, 10, 79, 1000 * 60 * 30);

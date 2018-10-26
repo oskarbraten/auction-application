@@ -56,6 +56,39 @@ public class Person {
         return auctions;
     }
 
+    public List<Bid> findPurchases() {
+        ArrayList<Bid> bids = new ArrayList<>();
+        for (Bid bid : this.bids) {
+            if (bid.isPurchase()) {
+                bids.add(bid);
+            }
+        }
+
+        return bids;
+    }
+
+    public List<Bid> findOutbidBids() {
+        ArrayList<Bid> bids = new ArrayList<>();
+        for (Bid bid : this.bids) {
+            if (!bid.getAuction().isComplete() && bid.getAuction().getHighestBid().getId() != bid.getId()) {
+                bids.add(bid);
+            }
+        }
+
+        return bids;
+    }
+
+	public List<Bid> findActiveBids() {
+		ArrayList<Bid> bids = new ArrayList<>();
+		for (Bid bid : this.bids) {
+			if (!bid.getAuction().isComplete() && bid.getAuction().getHighestBid().getId() == bid.getId()) {
+				bids.add(bid);
+			}
+		}
+
+		return bids;
+	}
+
     /** Data services */
 
     public String getUsername() {

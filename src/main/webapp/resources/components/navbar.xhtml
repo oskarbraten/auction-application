@@ -17,23 +17,26 @@
 
             <div class="container">
 
-                <a href="${'index.xhtml'}" class="navbar-brand">
+                <a href="${'index.xhtml'}" class="navbar-brand mr-auto">
                     The Auction House
                 </a>
-                <div class="d-flex justify-content-end">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <c:choose>
-                                <c:when test="${cc.attrs.showBackButton}">
-                                    <a class="nav-link" href="#{'index.xhtml'}">Back</a>
-                                </c:when>
-                                <c:when test="${cc.attrs.loggedIn}">
-                                    <a class="nav-link" href="${'account.xhtml'}">My account</a>
-                                </c:when>
-                            </c:choose>
-                        </li>
-                    </ul>
-                </div>
+
+                <span class="navbar-text mr-2">
+                    Logged in as #{loginController.getUser().username}
+                </span>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <c:choose>
+                            <c:when test="${cc.attrs.showBackButton}">
+                                <a class="nav-link" href="#{'index.xhtml'}">Back</a>
+                            </c:when>
+                            <c:when test="${cc.attrs.loggedIn}">
+                                <a class="nav-link" href="${'account.xhtml'}">My account</a>
+                            </c:when>
+                        </c:choose>
+                    </li>
+                </ul>
 
             </div>
 
